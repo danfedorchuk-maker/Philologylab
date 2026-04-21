@@ -76,7 +76,9 @@
             const data = await response.json();
 
             if (data.candidates && data.candidates[0].content) {
-                output.innerText = data.candidates[0].content.parts[0].text;
+              const rawText = data.candidates[0].content.parts[0].text;
+            output.innerHTML = marked.parse(rawText);
+            MathJax.typeset();
             } else if (data.error) {
                 output.innerText = "API ERROR: " + data.error;
             } else {
