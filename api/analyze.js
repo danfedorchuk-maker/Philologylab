@@ -2,8 +2,8 @@ export default async function handler(req, res) {
   const { word, tradition, lang } = req.body;
   const apiKey = process.env.GEMINI_API_KEY;
 
-  // APRIL 2026 ACTIVE MODEL
-  const model = "gemini-3-flash-preview"; 
+  // The absolute most stable model name for v1beta right now
+  const model = "gemini-1.5-flash"; 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 
   try {
@@ -13,21 +13,26 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         contents: [{ 
           parts: [{ 
-            text: `Perform a rigorous philological analysis of the term "${word}" within the ${tradition} tradition. Provide the output in ${lang}.` 
+            text: `Provide a scholarly philological analysis of the term "${word}" within the ${tradition} tradition. Output language: ${lang}.` 
           }] 
         }]
       })
     });
 
     const data = await response.json();
-    
+
+    // Check if Google returned an error
     if (data.error) {
-      // This will show us the EXACT Google error on your screen
-      return res.status(500).json({ error: data.error.message });
+      return res.status(500).json({ candidates: [{ content: { parts: [{ text: "Google API Error: " + data.error.message }] } }] });
     }
 
-    res.status(200).json(data);
+    // Check if we got a valid response structure
+    if (data.candidates && data.candidates[0]) {
+      res.status(200).json(data);
+    } else {
+      res.status(500).json({ candidates: [{ content: { parts: [{ text: "Unknown Response Format from AI." }] } }] });
+    }
   } catch (error) {
-    res.status(500).json({ error: "Failed to connect to the April 2026 API." });
+    res.status(500).json({ candidates: [{ content: { parts: [{ text: "Bridge Connection Failed." }] } }] });
   }
 }
