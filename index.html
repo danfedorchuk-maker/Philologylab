@@ -2,78 +2,84 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>The Philology Lab | Research Terminal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Philology Lab</title>
     <style>
-        body { background: #0f0f0f; color: #e0e0e0; font-family: 'Helvetica Neue', Arial, sans-serif; display: flex; justify-content: center; padding: 50px; }
-        .container { max-width: 950px; width: 100%; text-align: center; border: 1px solid #2a2a2a; padding: 50px; background: #1a1a1a; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-        h1 { color: #f58220; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; font-weight: 300; }
-        .subtitle { color: #888; margin-bottom: 35px; font-size: 0.9rem; letter-spacing: 1px; }
-        .input-group { margin: 30px 0; display: flex; flex-direction: column; gap: 15px; }
-        select, input { padding: 16px; background: #252525; border: 1px solid #333; color: white; font-size: 1rem; border-radius: 2px; outline: none; }
-        button { padding: 18px; background: #f58220; border: none; color: white; font-weight: bold; cursor: pointer; border-radius: 2px; font-size: 1rem; transition: 0.3s; }
-        button:hover { background: #ff9d4d; }
-        #output { margin-top: 40px; text-align: left; line-height: 1.8; border-top: 1px solid #2a2a2a; padding-top: 40px; white-space: pre-wrap; font-size: 1rem; color: #ccc; }
+        body { background-color: #0f0f0f; color: #d4d4d4; font-family: 'Georgia', serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .terminal { background-color: #1a1a1a; padding: 50px; border-radius: 2px; border: 1px solid #333; width: 90%; max-width: 800px; box-shadow: 0 0 30px rgba(0,0,0,0.8); }
+        h1 { color: #d4af37; letter-spacing: 4px; text-align: center; margin-bottom: 5px; font-weight: normal; }
+        p.subtitle { text-align: center; font-size: 0.7rem; color: #666; margin-bottom: 40px; letter-spacing: 2px; }
+        select, input { width: 100%; padding: 15px; margin: 12px 0; background: #111; border: 1px solid #444; color: #fff; font-size: 1rem; box-sizing: border-box; }
+        button { width: 100%; padding: 20px; background-color: #d4af37; border: none; color: #000; font-weight: bold; cursor: pointer; letter-spacing: 1px; transition: 0.3s; }
+        button:hover { background-color: #b8962d; }
+        #output { margin-top: 40px; white-space: pre-wrap; line-height: 1.8; color: #ccc; border-top: 1px dashed #444; padding-top: 30px; font-size: 1.05rem; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>THE PHILOLOGY LAB</h1>
-        <div class="subtitle">ADVANCED MULTILINGUAL EXEGESIS TERMINAL</div>
-        
-        <div class="input-group">
-            <select id="tradition">
-                <option value="Buddhism">Buddhism</option>
-                <option value="Hellenic Polytheism">Hellenic Polytheism</option>
-                <option value="Norse Paganism">Norse Paganism</option>
-                <option value="Taoism">Taoism</option>
-            </select>
 
-            <select id="language">
-                <option value="English">Output: English</option>
-                <option value="Russian">Output: Russian</option>
-                <option value="Sanskrit">Output: Sanskrit (Devanagari)</option>
-                <option value="Ancient Greek">Output: Ancient Greek (Polytonic)</option>
-                <option value="Old Norse">Output: Old Norse (Runes/Latin)</option>
-                <option value="Tibetan">Output: Tibetan (Uchen)</option>
-                <option value="Pali">Output: Pali (Romanized)</option>
-                <option value="Chinese">Output: Chinese (Traditional/Simplified)</option>
-            </select>
+<div class="terminal">
+    <h1>THE PHILOLOGY LAB</h1>
+    <p class="subtitle">ADVANCED MULTILINGUAL EXEGESIS TERMINAL</p>
 
-            <input type="text" id="userInput" placeholder="Enter Philosophical or Theological Term...">
-            <button onclick="generateWisdom()">EXECUTE SCHOLARLY ANALYSIS</button>
-        </div>
+    <select id="tradition">
+        <option value="Buddhism">Buddhism (Nikaya & Mahayana)</option>
+        <option value="Taoism">Taoism (Classical/Quanzhen)</option>
+        <option value="Hinduism">Hinduism (Vedic/Vedanta)</option>
+        <option value="Hellenic">Hellenic (Pre-Socratic/Platonic)</option>
+        <option value="Norse">Norse (Old Norse/Eddic)</option>
+        <option value="Sufism">Sufism (Islamic Mysticism)</option>
+    </select>
 
-        <div id="output">Awaiting sequence initialization... Database ready for term exegesis.</div>
-    </div>
+    <select id="language">
+        <option value="English">Output: English (Academic)</option>
+        <option value="Russian">Output: Russian (Русский)</option>
+        <option value="Traditional Chinese">Output: Traditional Chinese (繁體中文)</option>
+        <option value="Sanskrit">Output: Sanskrit (Devanagari)</option>
+        <option value="Ancient Greek">Output: Ancient Greek (Polytonic)</option>
+        <option value="Pali">Output: Pali (Theravada)</option>
+        <option value="Tibetan">Output: Tibetan (Uchen)</option>
+        <option value="German">Output: German (Philological)</option>
+        <option value="Latin">Output: Latin (Classical)</option>
+    </select>
 
-    <script>
-        async function generateWisdom() {
-            const word = document.getElementById('userInput').value;
-            const tradition = document.getElementById('tradition').value;
-            const lang = document.getElementById('language').value;
-            const output = document.getElementById('output');
+    <input type="text" id="userInput" placeholder="Enter Term (e.g., Shunyata, Logos, Qi)...">
 
-            if (!word) return alert("Please specify a term.");
-            output.innerHTML = "<b>Initializing Philological Scan...</b>";
+    <button onclick="generateWisdom()">EXECUTE SCHOLARLY ANALYSIS</button>
 
-            try {
-                const response = await fetch('/api/analyze', {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ word, tradition, lang })
-                });
+    <div id="output">SYSTEM STATUS: ONLINE. Awaiting ontological input...</div>
+</div>
 
-                const data = await response.json();
+<script>
+    async function generateWisdom() {
+        const word = document.getElementById('userInput').value;
+        const tradition = document.getElementById('tradition').value;
+        const lang = document.getElementById('language').value;
+        const output = document.getElementById('output');
 
-                if (data.candidates && data.candidates[0].content) {
-                    output.innerText = data.candidates[0].content.parts[0].text;
-                } else {
-                    output.innerHTML = "<b>SYSTEM ERROR:</b> " + (data.error ? data.error.message : "API check failed.");
-                }
-            } catch (e) {
-                output.innerHTML = "<b>HARDWARE EXCEPTION:</b> Connection to Vercel failed.";
+        if (!word) { alert("Input Required."); return; }
+
+        output.innerHTML = "<i style='color:#d4af37'>Initializing philological scan...</i>";
+
+        try {
+            const response = await fetch('/api/analyze', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ word, tradition, lang })
+            });
+
+            const data = await response.json();
+
+            if (data.candidates && data.candidates[0].content) {
+                output.innerText = data.candidates[0].content.parts[0].text;
+            } else if (data.error) {
+                output.innerText = "API ERROR: " + data.error;
+            } else {
+                output.innerText = "SYSTEM ERROR: Check Vercel logs.";
             }
+        } catch (err) {
+            output.innerText = "CONNECTION FAILURE.";
         }
-    </script>
+    }
+</script>
 </body>
 </html>
