@@ -11,18 +11,20 @@
     </script>
 
     <style>
-        body { background-color: #0f0f0f; color: #d4d4d4; font-family: 'Georgia', serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .terminal { background-color: #1a1a1a; padding: 50px; border-radius: 2px; border: 1px solid #333; width: 90%; max-width: 800px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); margin: 40px 0; }
-        h1 { color: #d4af37; letter-spacing: 4px; text-align: center; margin-bottom: 5px; text-transform: uppercase; }
-        .subtitle { text-align: center; font-size: 0.7rem; color: #666; margin-bottom: 40px; letter-spacing: 2px; text-transform: uppercase; }
-        select, input { width: 100%; padding: 15px; margin: 12px 0; background: #111; border: 1px solid #444; color: #fff; font-size: 1rem; box-sizing: border-box; font-family: 'Georgia', serif; }
-        button { width: 100%; padding: 20px; margin-top: 20px; background-color: #d4af37; border: none; color: #000; font-weight: bold; cursor: pointer; letter-spacing: 2px; transition: 0.3s; }
+        body { background-color: #0f0f0f; color: #d4d4d4; font-family: 'Georgia', serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .terminal { background-color: #1a1a1a; padding: 40px; border-radius: 4px; border: 1px solid #333; width: 100%; max-width: 900px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); margin-top: 50px; box-sizing: border-box; }
+        h1 { color: #d4af37; letter-spacing: 4px; text-align: center; margin-bottom: 5px; text-transform: uppercase; font-size: 2.5rem; }
+        .subtitle { text-align: center; font-size: 0.8rem; color: #666; margin-bottom: 40px; letter-spacing: 2px; text-transform: uppercase; }
+        .input-group { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+        select, input { width: 100%; padding: 15px; background: #111; border: 1px solid #444; color: #fff; font-size: 1rem; box-sizing: border-box; font-family: 'Georgia', serif; }
+        button { width: 100%; padding: 20px; margin-top: 20px; background-color: #d4af37; border: none; color: #000; font-weight: bold; cursor: pointer; letter-spacing: 2px; text-transform: uppercase; transition: 0.3s; }
         button:hover { background-color: #b8962d; }
         #output { margin-top: 40px; line-height: 1.8; color: #ccc; border-top: 1px dashed #444; padding-top: 30px; font-size: 1.1rem; }
-        /* Style for the new formatted text */
-        #output h3 { color: #d4af37; margin-top: 30px; }
-        #output ul { padding-left: 20px; }
-        #output li { margin-bottom: 10px; }
+        /* Professional Text Formatting */
+        #output h3 { color: #d4af37; margin-top: 30px; border-bottom: 1px solid #333; padding-bottom: 5px; }
+        #output ul { padding-left: 25px; margin: 15px 0; }
+        #output li { margin-bottom: 12px; }
+        #output p { margin-bottom: 20px; }
     </style>
     <h1>THE PHILOLOGY LAB</h1>
     <p class="subtitle">ADVANCED MULTILINGUAL EXEGESIS TERMINAL</p>
