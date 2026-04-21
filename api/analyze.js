@@ -2,9 +2,9 @@ export default async function handler(req, res) {
   const { word, tradition, lang } = req.body;
   const apiKey = process.env.GEMINI_API_KEY;
 
-  // Using the absolute latest April 2026 model name
-  const modelName = "gemini-3-flash-preview"; 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+  // APRIL 2026 ACTIVE MODEL
+  const model = "gemini-3-flash-preview"; 
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 
   try {
     const response = await fetch(url, {
@@ -20,14 +20,14 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
-
-    // If Google sends back an error, we want to see it
+    
     if (data.error) {
+      // This will show us the EXACT Google error on your screen
       return res.status(500).json({ error: data.error.message });
     }
 
     res.status(200).json(data);
   } catch (error) {
-    res.status(500).json({ error: "Failed to connect to Google API" });
+    res.status(500).json({ error: "Failed to connect to the April 2026 API." });
   }
 }
