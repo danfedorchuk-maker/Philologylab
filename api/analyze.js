@@ -2,8 +2,8 @@ export default async function handler(req, res) {
   const { word, tradition, lang } = req.body;
   const apiKey = process.env.GEMINI_API_KEY;
 
-  // The absolute most stable model name for v1beta right now
-  const model = "gemini-1.5-flash"; 
+  // APRIL 2026 ACTIVE MODEL
+  const model = "gemini-3-flash-preview"; 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 
   try {
@@ -11,28 +11,23 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        contents: [{ 
-          parts: [{ 
-            text: `Provide a scholarly philological analysis of the term "${word}" within the ${tradition} tradition. Output language: ${lang}.` 
-          }] 
-        }]
+        contents: [{ parts: [{ text: `Philological analysis of "${word}" in ${tradition} tradition. Language: ${lang}.` }] }]
       })
     });
 
     const data = await response.json();
-
-    // Check if Google returned an error
+    
+    // If Google returns an error, we wrap it so the index doesn't break
     if (data.error) {
-      return res.status(500).json({ candidates: [{ content: { parts: [{ text: "Google API Error: " + data.error.message }] } }] });
+      return res.status(200).json({ 
+        candidates: [{ content: { parts: [{ text: "GOOGLE API ERROR: " + data.error.message }] } }] 
+      });
     }
 
-    // Check if we got a valid response structure
-    if (data.candidates && data.candidates[0]) {
-      res.status(200).json(data);
-    } else {
-      res.status(500).json({ candidates: [{ content: { parts: [{ text: "Unknown Response Format from AI." }] } }] });
-    }
+    res.status(200).json(data);
   } catch (error) {
-    res.status(500).json({ candidates: [{ content: { parts: [{ text: "Bridge Connection Failed." }] } }] });
+    res.status(500).json({ 
+      candidates: [{ content: { parts: [{ text: "BRIDGE ERROR: Connection failed." }] } }] 
+    });
   }
 }
