@@ -70,47 +70,31 @@
         const apiKey = localStorage.getItem('G_KEY') || prompt("Paste your API Key here:");
         
         const tradition = document.getElementById('tradition').value;
-        const lang = document.getElementById('language').value;
-        const word = document.getElementById('userInput').value;
-        const output = document.getElementById('output');
+       const lang = document.getElementById('language').value;
+    const word = document.getElementById('userInput').value;
+    const tradition = document.getElementById('tradition').value;
+    const output = document.getElementById('output');
 
-        if (!word) return alert("Please specify a term.");
-        output.innerHTML = "<b>Initializing Philological Scan in " + lang + "...</b>";
+    if (!word) return alert("Please specify a term.");
+    
+    output.innerHTML = "<b>Initializing Philological Scan in " + lang + "...</b>";
 
-        https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}
+    try {
+        const response = await fetch('/api/analyze', {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ word, tradition, lang })
+        });
 
-        const prompt = `You are a world-class philologist. Perform a rigorous scholarly analysis of "${word}" within ${tradition}. 
-        
-        SOURCE RULES:
-        - USE PRIMARY SOURCES ONLY (Vedas, Upanishads, Sutras, Agamas, Eddas, etc.).
-        - USE INDIGENOUS COMMENTARIES (e.g., Shankara, Nagarjuna, Zhuangzi).
-        - STRICTLY AVOID 19th-century colonial/Orientalist perspectives (e.g., DO NOT cite Max Müller or similar Victorian-era interpretations).
-        
-        REQUIRED STRUCTURE:
-        1. Comprehensive response in ${lang} (approx 1,000 words).
-        2. MANDATORY SCRIPTS: 
-           - Dharmic: Sanskrit (Devanagari), Pali (Romanized), Tibetan (Uchen).
-           - Hellenic: Ancient Greek (Polytonic).
-           - Norse: Old Norse (Romanized) and Younger Futhark Runes.
-           - Taoist: Traditional and Simplified Chinese.
-        3. Neutral, academic, objective tone.`;
+        const data = await response.json();
 
-        try {
-            const response = await fetch( '/api/analyze',{
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-            });
-            const data = await response.json();
-            
-            if (data.candidates && data.candidates[0].content) {
-                output.innerHTML = data.candidates[0].content.parts[0].text;
-            } else {
-                output.innerHTML = "<b>ANALYSIS ERROR:</b> " + (data.error ? data.error.message : "Check API Key.");
-            }
-        } catch (e) {
-            output.innerHTML = "<b>HARDWARE EXCEPTION.</b> Check Console.";
+        if (data.candidates && data.candidates[0].content) {
+            output.innerHTML = data.candidates[0].content.parts[0].text;
+        } else {
+            output.innerHTML = "<b>ANALYSIS ERROR:</b> " + (data.error ? data.error.message : "Check Vercel Logs.");
         }
+    } catch (e) {
+        output.innerHTML = "<b>HARDWARE EXCEPTION:</b> Connection to Vercel failed.";
     }
 </script>
 
