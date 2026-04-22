@@ -56,64 +56,39 @@
 
         <div id="output">SYSTEM STATUS: ONLINE. Awaiting ontological input...</div>
     </div>
-<div style="border: 1px solid #d4af37; padding: 15px; margin: 20px 0; background: #111; text-align: center;">
-        <h3 style="color: #d4af37;">PREVIEW & ACCESS</h3>
-        <div style="margin-bottom: 10px;">
-            <button onclick="document.getElementById('sample-text').innerText = 'WICCA SAMPLE: Athame is a ritual blade... [Full exegesis available after purchase]'">Wicca Sample</button>
-            <button onclick="document.getElementById('sample-text').innerText = 'BUDDHIST SAMPLE: Dharma (dhr) means to hold... [Full exegesis available after purchase]'">Buddhist Sample</button>
-        </div>
-        <pre id="sample-text" style="color: #888; font-size: 0.8em;">Click for quality check.</pre>
-        <hr style="border: 0.5px solid #333;">
-        <a href="https://buy.stripe.com/9B67sLgjb1xG0L92pj43S02" style="background:#d4af37; color:black; padding:8px; text-decoration:none; display:inline-block; margin:5px; font-weight:bold;">$5.00</a>
-        <a href="https://buy.stripe.com/7sY3cv8QJ7W4eBZd3X43S03" style="background:#d4af37; color:black; padding:8px; text-decoration:none; display:inline-block; margin:5px; font-weight:bold;">$2.00</a>
-        <a href="https://buy.stripe.com/aFadR95Ex6S0fG3gg943S04" style="background:#d4af37; color:black; padding:8px; text-decoration:none; display:inline-block; margin:5px; font-weight:bold;">$0.50</a>
-    </div>
+
     <script>
-       async function generateWisdom() {
-    const word = document.getElementById('userInput').value;
-    const tradition = document.getElementById('tradition').value;
-    const lang = document.getElementById('language').value;
-    const output = document.getElementById('output');
+        async function generateWisdom() {
+            const word = document.getElementById('userInput').value;
+            const tradition = document.getElementById('tradition').value;
+            const lang = document.getElementById('language').value;
+            const output = document.getElementById('output');
 
-    if (!word) { alert("Input Required."); return; }
+            if (!word) { alert("Input Required."); return; }
+            output.innerHTML = "<i style='color:#d4af37'>Initializing philological scan...</i>";
 
-    // THE HONOR SYSTEM GATE
-    const hasPaid = confirm("ACCESS RESTRICTED: Have you purchased an access tier below? \n\n(Click 'OK' if you have paid, or 'Cancel' to view access tiers.)");
-    
-    if (!hasPaid) {
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-        return;
-    }
+            try {
+                // This calls YOUR Vercel function, which safely holds the key
+                const response = await fetch('/api/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ word, tradition, lang })
+                });
 
-    output.innerHTML = "<i style='color:#d4af37;'>Initializing philological scan...</i>";
-
-    try {
-        const response = await fetch('/api/analyze', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ word, tradition, lang })
-        });
-
-        const data = await response.json();
-        if (data.candidates && data.candidates[0].content) {
-            const rawText = data.candidates[0].content.parts[0].text;
-            output.innerHTML = marked.parse(rawText);
-            if (window.MathJax) MathJax.typeset();
-        } else {
-            throw new Error("Invalid Response");
+                const data = await response.json();
+                
+                if (data.candidates && data.candidates[0].content) {
+                    const rawText = data.candidates[0].content.parts[0].text;
+                    output.innerHTML = marked.parse(rawText);
+                    MathJax.typeset();
+                } else {
+                    throw new Error("Invalid Response");
+                }
+            } catch (error) {
+                console.error(error);
+                output.innerHTML = "<div style='text-align:center; color:#666; letter-spacing:2px;'><br><br>CONNECTION FAILURE.</div>";
+            }
         }
-    } catch (error) {
-        console.error(error);
-        output.innerHTML = "<div style='text-align:center; color:#666; letter-spacing:2px;'><br><br>CONNECTION FAILURE.</div>";
-    }
-} 
-
-    <div id="google_translate_element" style="text-align:center; padding:20px; border-top: 1px solid #333;"></div>
-<script type="text/javascript">
-function googleTranslateElementInit() {
-  new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
-}
-</script>
-<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    </script>
 </body>
 </html>
