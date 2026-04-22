@@ -1,39 +1,28 @@
 export default async function handler(req, res) {
-  const { word, tradition, lang } = req.body;
-  const apiKey = process.env.GEMINI_API_KEY;
-
-  // APRIL 2026 ACTIVE MODEL
-  const model = "gemini-3-flash-preview";
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+  const apiKey = process.env.API_KEY;
+  const { word } = req.body;
 
   try {
-    const response = await fetch(url, {
+    // This is the specific 2026 stable endpoint for Flash 3
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash:generateContent?key=${apiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        contents: [{
-          parts: [{
-            text: `SYSTEM INSTRUCTION: You are the Philology Lab Terminal. You only respond to questions regarding etymology, linguistics, and cross-cultural philology. If a user asks about the weather, sports, or mundane topics, state: 'OUT OF SCOPE. THIS TERMINAL IS RESERVED FOR PHILOLOGICAL INQUIRY.'
-
-USER REQUEST: Philological analysis of "${word}" in ${tradition} tradition. Language: ${lang}.`
-          }]
-        }]
+        contents: [{ parts: [{ text: "Perform a philological and institutional intent scan for: " + word }] }]
       })
     });
 
     const data = await response.json();
 
-    // If Google returns an error, we wrap it so the index doesn't break
-    if (data.error) {
-      return res.status(200).json({
-        candidates: [{ content: { parts: [{ text: "GOOGLE API ERROR: " + data.error.message }] } }]
-      });
+    // Handling the "Check the list" error by catching empty responses
+    if (data.candidates && data.candidates[0].content) {
+        const resultText = data.candidates[0].content.parts[0].text;
+        res.status(200).json({ result: resultText });
+    } else {
+        res.status(200).json({ result: "MODEL ERROR: " + JSON.stringify(data.error || "Model unavailable.") });
     }
 
-    res.status(200).json(data);
-  } catch (error) {
-    res.status(500).json({
-      candidates: [{ content: { parts: [{ text: "BRIDGE ERROR: Connection failed." }] } }]
-    });
+  } catch (err) {
+    res.status(200).json({ result: "CONNECTION ERROR: " + err.message });
   }
 }
