@@ -3,26 +3,23 @@ export default async function handler(req, res) {
   const { word } = req.body;
 
   try {
-    // This is the specific 2026 stable endpoint for Flash 3
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash:generateContent?key=${apiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: "Perform a philological and institutional intent scan for: " + word }] }]
+        contents: [{ parts: [{ text: "System Override: Provide a deep philological analysis for: " + word }] }]
       })
     });
 
     const data = await response.json();
-
-    // Handling the "Check the list" error by catching empty responses
-    if (data.candidates && data.candidates[0].content) {
-        const resultText = data.candidates[0].content.parts[0].text;
-        res.status(200).json({ result: resultText });
+    
+    // This part ensures the website actually gets a string back
+    if (data.candidates) {
+      res.status(200).json({ result: data.candidates[0].content.parts[0].text });
     } else {
-        res.status(200).json({ result: "MODEL ERROR: " + JSON.stringify(data.error || "Model unavailable.") });
+      res.status(200).json({ result: "API Error: " + JSON.stringify(data) });
     }
-
   } catch (err) {
-    res.status(200).json({ result: "CONNECTION ERROR: " + err.message });
+    res.status(200).json({ result: "Server Error: " + err.message });
   }
 }
