@@ -61,49 +61,50 @@
         <div id="output">SYSTEM STATUS: ONLINE. Awaiting ontological input...</div>
     </div>
 
-    <script>
-        async function generateWisdom() {
-            const word = document.getElementById('userInput').value;
-            const tradition = document.getElementById('tradition').value;
-            const lang = document.getElementById('language').value;
-            const output = document.getElementById('output');
-
-            if (!word) { alert("Input Required."); return; }
-            output.innerHTML = "<i style='color:#d4af37'>Initializing philological scan...</i>";
-
-            try {
-                // This calls YOUR Vercel function, which safely holds the key
-                const response = await fetch('/api/analyze', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ word, tradition, lang })
-                });
-
-                const data = await response.json();
-                
-                if (data.candidates && data.candidates[0].content) {
-                    const rawText = data.candidates[0].content.parts[0].text;
-                    output.innerHTML = marked.parse(rawText);
-                    localStorage.setItem('philology_vault', rawText);
-                    MathJax.typeset();
-                } else {
-                    throw new Error("Invalid Response");
-                }
-            } catch (error) {
-  window.onload = function() {
-    const savedData = localStorage.getItem('philology_vault');
-    if (savedData) {
+   <script>
+    async function generateWisdom() {
+        const word = document.getElementById('userInput').value;
+        const tradition = document.getElementById('tradition').value;
+        const lang = document.getElementById('language').value;
         const output = document.getElementById('output');
-        // Ensure marked is ready
-        if (typeof marked !== 'undefined') {
-            output.innerHTML = marked.parse(savedData);
-        } else {
-            output.innerHTML = savedData;
-        }
-        
-        // Safety check for MathJax to prevent "hanging"
-        if (window.MathJax && MathJax.typeset) {
-            MathJax.typeset();
+
+        if (!word) { alert("Input Required."); return; }
+        output.innerHTML = "<i style='color:#d4af37'>Initializing philological scan...</i>";
+
+        try {
+            const response = await fetch('/api/analyze', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ word, tradition, lang })
+            });
+
+            const data = await response.json();
+
+            if (data.candidates && data.candidates[0].content) {
+                const rawText = data.candidates[0].content.parts[0].text;
+                output.innerHTML = marked.parse(rawText);
+                
+                // This saves the data so it doesn't vanish
+                localStorage.setItem('philology_vault', rawText);
+                
+                if (window.MathJax) MathJax.typeset();
+            } else {
+                throw new Error("Invalid Response");
+            }
+        } catch (error) {
+            console.error(error);
+            output.innerHTML = "CONNECTION FAILURE.";
         }
     }
-};
+
+    // This part makes the app "Remember" when it opens
+    window.onload = function() {
+        const savedData = localStorage.getItem('philology_vault');
+        if (savedData) {
+            const output = document.getElementById('output');
+            if (output) output.innerHTML = marked.parse(savedData);
+        }
+    };
+</script>
+</body>
+</html>
