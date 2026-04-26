@@ -91,20 +91,13 @@
             } else {
                 throw new Error("Invalid Response");
             }
-        } catch (error) {
-            console.error(error);
-            output.innerHTML = "CONNECTION FAILURE.";
-        }
+       } catch (error) {
+        console.error(error);
+        output.innerHTML = "CONNECTION FAILURE.";
     }
+}
 
-    // This part makes the app "Remember" when it opens
-    window.onload = function() {
-        const savedData = localStorage.getItem('philology_vault');
-        if (savedData) {
-            const output = document.getElementById('output');
-            if (output) output.innerHTML = marked.parse(savedData);
-        }
-    };
+// We removed the window.onload "recall" to stop the phone from hanging.
+// The app will now be fast and stable again.
 </script>
-</body>
 </html>
