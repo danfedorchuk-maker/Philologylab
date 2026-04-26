@@ -90,17 +90,20 @@
                     throw new Error("Invalid Response");
                 }
             } catch (error) {
-                console.error(error);
-                output.innerHTML = "<div style='text-align:center; color:#666; letter-spacing:2px;'><br><br>CONNECTION FAILURE.</div>";
-            }
-            window.onload = function() {
+  window.onload = function() {
     const savedData = localStorage.getItem('philology_vault');
     if (savedData) {
         const output = document.getElementById('output');
-        output.innerHTML = marked.parse(savedData);
-        MathJax.typeset();
+        // Ensure marked is ready
+        if (typeof marked !== 'undefined') {
+            output.innerHTML = marked.parse(savedData);
+        } else {
+            output.innerHTML = savedData;
+        }
+        
+        // Safety check for MathJax to prevent "hanging"
+        if (window.MathJax && MathJax.typeset) {
+            MathJax.typeset();
+        }
     }
 };
-    </script>
-</body>
-</html>
