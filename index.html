@@ -84,6 +84,7 @@
                 if (data.candidates && data.candidates[0].content) {
                     const rawText = data.candidates[0].content.parts[0].text;
                     output.innerHTML = marked.parse(rawText);
+                    localStorage.setItem('philology_vault', rawText);
                     MathJax.typeset();
                 } else {
                     throw new Error("Invalid Response");
@@ -92,7 +93,14 @@
                 console.error(error);
                 output.innerHTML = "<div style='text-align:center; color:#666; letter-spacing:2px;'><br><br>CONNECTION FAILURE.</div>";
             }
-        }
+            window.onload = function() {
+    const savedData = localStorage.getItem('philology_vault');
+    if (savedData) {
+        const output = document.getElementById('output');
+        output.innerHTML = marked.parse(savedData);
+        MathJax.typeset();
+    }
+};
     </script>
 </body>
 </html>
