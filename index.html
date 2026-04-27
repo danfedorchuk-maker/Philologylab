@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Philology Lab</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body { background-color: #0f0f0f; color: #d4d4d4; font-family: 'Georgia', serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .terminal { background-color: #1a1a1a; padding: 40px; border-radius: 4px; border: 1px solid #333; width: 100%; max-width: 950px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); margin-top: 50px; box-sizing: border-box; }
+        h1 { color: #d4af37; letter-spacing: 4px; text-align: center; margin-bottom: 5px; text-transform: uppercase; font-size: 2.5rem; }
+        .subtitle { text-align: center; font-size: 0.8rem; color: #666; margin-bottom: 40px; letter-spacing: 2px; text-transform: uppercase; }
+        .input-group { display: flex; flex-direction: column; gap: 15px; width: 100%; }
+        select, input { width: 100%; padding: 15px; background: #111; border: 1px solid #444; color: #fff; font-size: 1rem; box-sizing: border-box; font-family: 'Georgia', serif; }
+        button { width: 100%; padding: 20px; margin-top: 20px; background-color: #d4af37; border: none; color: #000; font-weight: bold; cursor: pointer; letter-spacing: 2px; text-transform: uppercase; transition: 0.3s; }
+        button:hover { background-color: #b8962d; }
+        #output { margin-top: 40px; line-height: 1.8; color: #ccc; border-top: 1px dashed #444; padding-top: 30px; font-size: 1.1rem; }
+        #output h3 { color: #d4af37; margin-top: 30px; border-bottom: 1px solid #333; padding-bottom: 5px; }
+    </style>
+</head>
+<body>
+
+    <div class="terminal">
+        <h1>The Philology Lab</h1>
+        <div class="subtitle">Advanced Multilingual Exegesis Terminal</div>
+
+        <div class="input-group">
+            <select id="tradition">
+                <option value="Buddhism (Nikaya & Mahayana)">Buddhism (Nikaya & Mahayana)</option>
+                <option value="Tibetan/Tantric Buddhism (Vajrayana)">Tibetan/Tantric Buddhism (Vajrayana)</option>
+                <option value="Hellenic (Pre-Socratic/Platonic)">Hellenic (Pre-Socratic/Platonic)</option>
+                <option value="Vedic/Upanishadic">Vedic/Upanishadic</option>
+                <option value="Hermetic/Alchemical">Hermetic/Alchemical</option>
+                <option value="Slavic Philology/Etymology">Slavic Philology/Etymology</option>
+                <option value="Germanic/Norse Philology">Germanic/Norse Philology</option>
+                <option value="Sinological/Daoist">Sinological/Daoist</option>
+            </select>
+
+            <select id="language">
+                <option value="English (Academic)">English (Academic)</option>
+                <option value="Russian">Russian (Русский)</option>
+                <option value="Sanskrit">Sanskrit (संस्कृतम्)</option>
+                <option value="Hindi">Hindi (हिन्दी)</option>
+                <option value="Pali">Pali (पाऴि)</option>
+                <option value="German">German (Deutsch)</option>
+                <option value="French">French (Français)</option>
+                <option value="Chinese (Simplified)">Chinese (Simplified/Communist)</option>
+                <option value="Chinese (Traditional)">Chinese (Traditional)</option>
+                <option value="Ancient Greek">Ancient Greek (Ἑλληνική)</option>
+            </select>
+
+            <input type="text" id="userInput" placeholder="Enter Term...">
+            <button onclick="generateWisdom()">Execute Scholarly Analysis</button>
+        </div>
+
+        <div id="output">SYSTEM STATUS: ONLINE. Awaiting ontological input...</div>
+    </div>
+
+    <script>
+        async function generateWisdom() {
+            const word = document.getElementById('userInput').value;
+            const tradition = document.getElementById('tradition').value;
+            const lang = document.getElementById('language').value;
+            const output = document.getElementById('output');
+
+            if (!word) { alert("Input Required."); return; }
+            output.innerHTML = "<i style='color:#d4af37'>Initializing philological scan...</i>";
+
+            try {
+                // This calls YOUR Vercel function, which safely holds the key
+                const response = await fetch('/api/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ word, tradition, lang })
+                });
+
+                const data = await response.json();
+                
+                if (data.candidates && data.candidates[0].content) {
+                    const rawText = data.candidates[0].content.parts[0].text;
+                    output.innerHTML = marked.parse(rawText);
+                    MathJax.typeset();
+                } else {
+                    throw new Error("Invalid Response");
+                }
+            } catch (error) {
+                console.error(error);
+                output.innerHTML = "<div style='text-align:center; color:#666; letter-spacing:2px;'><br><br>CONNECTION FAILURE.</div>";
+            }
+        }
+    </script>
+</body>
+</html>
