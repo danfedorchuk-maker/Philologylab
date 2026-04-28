@@ -1,44 +1,98 @@
-<script>
-    async function go() {
-        const out = document.getElementById('response');
-        const input = document.getElementById('inp').value;
-        
-        if (!input) {
-            out.innerText = "Provide a word to dredge, or get out.";
-            return;
-        }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask Babaji: Philology</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body { background-color: #0f0f0f; color: #d4d4d4; font-family: 'Georgia', serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .terminal { background-color: #1a1a1a; padding: 40px; border-radius: 4px; border: 1px solid #333; width: 100%; max-width: 950px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); margin-top: 50px; box-sizing: border-box; }
+        h1 { color: #d4af37; letter-spacing: 4px; text-align: center; margin-bottom: 5px; text-transform: uppercase; font-size: 2.5rem; }
+        .subtitle { text-align: center; font-size: 0.8rem; color: #666; margin-bottom: 40px; letter-spacing: 2px; text-transform: uppercase; }
+        .input-group { display: flex; flex-direction: column; gap: 15px; width: 100%; }
+        select, input { width: 100%; padding: 15px; background: #111; border: 1px solid #444; color: #fff; font-size: 1rem; box-sizing: border-box; font-family: 'Georgia', serif; }
+        button { width: 100%; padding: 20px; margin-top: 20px; background-color: #4b0082; border: 1px solid #d4af37; color: #fff; font-weight: bold; cursor: pointer; letter-spacing: 2px; text-transform: uppercase; transition: 0.3s; }
+        button:hover { background-color: #d4af37; color: #000; }
+        #output { margin-top: 40px; line-height: 1.8; color: #ccc; border-top: 1px dashed #444; padding-top: 30px; font-size: 1.1rem; }
+        #output h3 { color: #d4af37; margin-top: 30px; border-bottom: 1px solid #333; padding-bottom: 5px; }
+    </style>
+</head>
+<body>
 
-        out.innerText = "Dredging the silt...";
-        
-        try {
-            // Path matches your GitHub file: api/analyze.js
-            const res = await fetch('/api/analyze', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text: input })
-            });
+    <div class="terminal">
+        <h1>ASK BABAJI</h1>
+        <div class="subtitle">Dredging the Silt of Language & Tradition</div>
 
-            if (!res.ok) throw new Error('Backend unresponsive.');
+        <div class="input-group">
+            <select id="tradition">
+                <option value="Buddhism (Nikaya & Mahayana)">Buddhism (Nikaya & Mahayana)</option>
+                <option value="Tibetan/Tantric Buddhism (Vajrayana)">Tibetan/Tantric Buddhism (Vajrayana)</option>
+                <option value="Hellenic (Pre-Socratic/Platonic)">Hellenic (Pre-Socratic/Platonic)</option>
+                <option value="Vedic/Upanishadic">Vedic/Upanishadic</option>
+                <option value="Hermetic/Alchemical">Hermetic/Alchemical</option>
+                <option value="Slavic Philology/Etymology">Slavic Philology/Etymology</option>
+                <option value="Germanic/Norse Philology">Germanic/Norse Philology</option>
+                <option value="Sinological/Daoist">Sinological/Daoist</option>
+            </select>
 
-            const data = await res.json();
-            
-            // Typewriter effect for Babaji's response
-            out.innerText = "";
-            let i = 0;
-            const text = data.analysis;
-            
-            function type() {
-                if (i < text.length) {
-                    out.innerText += text.charAt(i);
-                    i++;
-                    setTimeout(type, 30); // Speed of the "dredge"
+            <select id="language">
+                <option value="English (Academic)">English (Academic)</option>
+                <option value="Russian">Russian (Русский)</option>
+                <option value="Sanskrit">Sanskrit (संस्कृतम्)</option>
+                <option value="Hindi">Hindi (हिन्दी)</option>
+                <option value="Pali">Pali (पाऴि)</option>
+                <option value="German">German (Deutsch)</option>
+                <option value="French">French (Français)</option>
+                <option value="Chinese (Simplified)">Chinese (Simplified/Communist)</option>
+                <option value="Chinese (Traditional)">Chinese (Traditional)</option>
+                <option value="Ancient Greek">Ancient Greek (Ἑλληνική)</option>
+            </select>
+
+            <input type="text" id="userInput" placeholder="Enter Term for Analysis...">
+            <button onclick="generateWisdom()">Dredge the Roots</button>
+        </div>
+
+        <div id="output">SYSTEM STATUS: READY. Awaiting ontological input...</div>
+    </div>
+
+    <script>
+        async function generateWisdom() {
+            const word = document.getElementById('userInput').value;
+            const tradition = document.getElementById('tradition').value;
+            const lang = document.getElementById('language').value;
+            const output = document.getElementById('output');
+
+            if (!word) { alert("Input Required."); return; }
+            output.innerHTML = "<i style='color:#d4af37'>Dredging the silt...</i>";
+
+            try {
+                // Pointing specifically to your backend at /api/analyze
+                const response = await fetch('/api/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ word, tradition, lang })
+                });
+
+                const data = await response.json();
+                
+                // Handling the specific response structure from your analyze.js
+                if (data.analysis) {
+                    output.innerHTML = marked.parse(data.analysis);
+                    MathJax.typeset();
+                } else if (data.candidates && data.candidates[0].content) {
+                    const rawText = data.candidates[0].content.parts[0].text;
+                    output.innerHTML = marked.parse(rawText);
+                    MathJax.typeset();
+                } else {
+                    throw new Error("Invalid Response Structure");
                 }
+            } catch (error) {
+                console.error(error);
+                output.innerHTML = "<div style='text-align:center; color:#666; letter-spacing:2px;'><br><br>DREDGE FAILURE. Check connection.</div>";
             }
-            type();
-
-        } catch (e) {
-            out.innerText = "The connection is silted up. Try again.";
-            console.error(e);
         }
-    }
-</script>
+    </script>
+</body>
+</html>
