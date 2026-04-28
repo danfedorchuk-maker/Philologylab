@@ -1,69 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ask Babaji: Philology</title>
+    <title>Ask Babaji</title>
     <style>
-        body { background: #0b0b1a; color: #d4af37; font-family: 'Courier New', Courier, monospace; text-align: center; padding: 20px; margin: 0; }
-        .babaji-frame { border: 2px solid #d4af37; padding: 30px; border-radius: 15px; background: rgba(255,255,255,0.05); max-width: 550px; margin: auto; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
-        h1 { letter-spacing: 5px; text-shadow: 0 0 10px #d4af37; margin-bottom: 5px; color: #d4af37; }
-        .silt-tag { font-size: 0.75rem; letter-spacing: 2px; color: #888; margin-bottom: 30px; display: block; text-transform: uppercase; }
-        .input-box { width: 90%; margin: auto; text-align: left; }
-        label { font-size: 0.8rem; color: #d4af37; display: block; margin-bottom: 8px; font-weight: bold; }
-        textarea { width: 100%; height: 130px; padding: 15px; border-radius: 8px; border: 1px solid #d4af37; background: #1a1a2e; color: white; font-size: 1.1rem; box-sizing: border-box; resize: none; outline: none; }
-        .action-btn { background: #4b0082; color: white; padding: 18px; border: none; border-radius: 50px; cursor: pointer; font-size: 1.2rem; width: 95%; margin-top: 25px; box-shadow: 0 0 15px #6a0dad; font-weight: bold; transition: 0.3s; }
-        .action-btn:hover { background: #6a0dad; transform: scale(1.02); }
-        #babaji-spew { margin-top: 30px; font-style: italic; line-height: 1.7; color: #eee; padding: 20px; border-top: 1px dashed #444; text-align: left; white-space: pre-wrap; min-height: 120px; font-size: 1.05rem; }
+        body { background: #0b0b1a; color: #d4af37; font-family: monospace; text-align: center; padding: 50px; }
+        .box { border: 2px solid #d4af37; padding: 20px; max-width: 500px; margin: auto; }
+        textarea { width: 90%; height: 100px; background: #1a1a2e; color: white; border: 1px solid #d4af37; }
+        button { background: #4b0082; color: white; padding: 15px; width: 95%; margin-top: 20px; cursor: pointer; }
+        #response { margin-top: 20px; text-align: left; font-style: italic; }
     </style>
 </head>
 <body>
-
-    <div class="babaji-frame">
+    <div class="box">
         <h1>ASK BABAJI</h1>
-        <span class="silt-tag">Dredging the Silt of Language</span>
-        
-        <div class="input-box">
-            <label>The Word or Phrase</label>
-            <textarea id="wordInput" placeholder="What words are bothering you?"></textarea>
-        </div>
-        
-        <button class="action-btn" onclick="dredgeSilt()">Dredge the Roots</button>
-
-        <div id="babaji-spew">Babaji is ready to dismantle your vocabulary...</div>
+        <p>DREDGING THE SILT OF LANGUAGE</p>
+        <textarea id="inp" placeholder="Enter word..."></textarea><br>
+        <button onclick="go()">DREDGE THE ROOTS</button>
+        <div id="response">Waiting...</div>
     </div>
-
     <script>
-        async function dredgeSilt() {
-            const val = document.getElementById('wordInput').value;
-            const resBox = document.getElementById('babaji-spew');
-
-            if (!val) return alert("Babaji cannot analyze silence.");
-            resBox.innerText = "Sifting through the ancient dirt...";
-
+        async function go() {
+            const out = document.getElementById('response');
+            out.innerText = "Dredging...";
             try {
-                const response = await fetch('/api/philology', {
+                const res = await fetch('/api/philology', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text: val })
+                    body: JSON.stringify({ text: document.getElementById('inp').value })
                 });
-                const data = await response.json();
-                
-                if (data.analysis) {
-                    let i = 0;
-                    resBox.innerText = "";
-                    function typeOut() {
-                        if (i < data.analysis.length) {
-                            resBox.innerText += data.analysis.charAt(i);
-                            i++;
-                            setTimeout(typeOut, 25);
-                        }
-                    }
-                    typeOut();
-                }
-            } catch (e) {
-                resBox.innerText = "The linguistic bridge has collapsed.";
-            }
+                const data = await res.json();
+                out.innerText = data.analysis;
+            } catch (e) { out.innerText = "Error."; }
         }
     </script>
 </body>
