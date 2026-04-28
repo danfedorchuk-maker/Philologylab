@@ -1,37 +1,44 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Ask Babaji</title>
-    <style>
-        body { background: #0b0b1a; color: #d4af37; font-family: monospace; text-align: center; padding: 50px; }
-        .box { border: 2px solid #d4af37; padding: 20px; max-width: 500px; margin: auto; }
-        textarea { width: 90%; height: 100px; background: #1a1a2e; color: white; border: 1px solid #d4af37; }
-        button { background: #4b0082; color: white; padding: 15px; width: 95%; margin-top: 20px; cursor: pointer; }
-        #response { margin-top: 20px; text-align: left; font-style: italic; }
-    </style>
-</head>
-<body>
-    <div class="box">
-        <h1>ASK BABAJI</h1>
-        <p>DREDGING THE SILT OF LANGUAGE</p>
-        <textarea id="inp" placeholder="Enter word..."></textarea><br>
-        <button onclick="go()">DREDGE THE ROOTS</button>
-        <div id="response">Waiting...</div>
-    </div>
-    <script>
-        async function go() {
-            const out = document.getElementById('response');
-            out.innerText = "Dredging...";
-            try {
-                const res = await fetch('/api/philology', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text: document.getElementById('inp').value })
-                });
-                const data = await res.json();
-                out.innerText = data.analysis;
-            } catch (e) { out.innerText = "Error."; }
+<script>
+    async function go() {
+        const out = document.getElementById('response');
+        const input = document.getElementById('inp').value;
+        
+        if (!input) {
+            out.innerText = "Provide a word to dredge, or get out.";
+            return;
         }
-    </script>
-</body>
-</html>
+
+        out.innerText = "Dredging the silt...";
+        
+        try {
+            // Path matches your GitHub file: api/analyze.js
+            const res = await fetch('/api/analyze', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: input })
+            });
+
+            if (!res.ok) throw new Error('Backend unresponsive.');
+
+            const data = await res.json();
+            
+            // Typewriter effect for Babaji's response
+            out.innerText = "";
+            let i = 0;
+            const text = data.analysis;
+            
+            function type() {
+                if (i < text.length) {
+                    out.innerText += text.charAt(i);
+                    i++;
+                    setTimeout(type, 30); // Speed of the "dredge"
+                }
+            }
+            type();
+
+        } catch (e) {
+            out.innerText = "The connection is silted up. Try again.";
+            console.error(e);
+        }
+    }
+</script>
