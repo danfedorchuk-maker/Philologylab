@@ -1,19 +1,22 @@
 export default async function handler(req, res) {
-  // 1. Allow Vercel to handle the request
+  // 1. Standard headers to prevent errors
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST');
+  
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const { word, tradition, lang } = req.body;
+  const apiKey = process.env.GEMINI_API_KEY;
 
-  // 2. The Instructions for the Brain
-  const prompt = `You are "Babaji," a master of universal philology. 
-    Analyze the term "${word}" (Source: ${lang}). 
-    Bridge it to the "${tradition}" tradition. 
-    Explain the deep, esoteric overlap between these systems. 
-    Tone: Scholarly, mysterious, and uncompromising. Use LaTeX for math/symbols.`;
+  // 2. Immediate check: If the key is missing from the brain's perspective
+  if (!apiKey) {
+    return res.status(500).json({ analysis: "Babaji is silent. Vercel cannot find the GEMINI_API_KEY." });
+  }
+
+  const prompt = `You are Babaji. Analyze the word "${word}" from ${lang} and its connection to the ${tradition} tradition. Be deep and esoteric.`;
 
   try {
-    // 3. The Handshake with Gemini
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`, {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -23,13 +26,12 @@ export default async function handler(req, res) {
 
     const data = await response.json();
     
-    // 4. Send the wisdom back to the screen
-    if (data.candidates && data.candidates[0].content.parts[0].text) {
+    if (data.candidates && data.candidates[0].content) {
       res.status(200).json({ analysis: data.candidates[0].content.parts[0].text });
     } else {
-      res.status(500).json({ analysis: "The Oracle is silent. Check the API Key." });
+      res.status(500).json({ analysis: "Babaji is silent. The API returned an empty response." });
     }
   } catch (error) {
-    res.status(500).json({ analysis: "Dredge Failure: The silt is too thick." });
+    res.status(500).json({ analysis: "Babaji is silent. The connection to the deep was severed." });
   }
 }
