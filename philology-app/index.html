@@ -3,87 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ask Babaji</title>
+    <title>Ask Babaji: Universal Philology</title>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         body { background-color: #050505; color: #d4d4d4; font-family: 'Georgia', serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        .terminal { background-color: #111; padding: 30px; border: 1px solid #d4af37; width: 100%; max-width: 500px; box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); border-radius: 8px; margin-top: 20px; box-sizing: border-box; position: relative; }
+        .terminal { background-color: #111; padding: 30px; border: 1px solid #d4af37; width: 100%; max-width: 550px; box-shadow: 0 0 25px rgba(212, 175, 55, 0.15); border-radius: 12px; margin-top: 20px; box-sizing: border-box; position: relative; }
         
-        /* Prabu's Animation & Speech */
-        @keyframes prabuFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
-        .prabu-container { text-align: center; margin-bottom: 10px; }
-        .prabu-img { font-size: 55px; animation: prabuFloat 3s ease-in-out infinite; cursor: pointer; display: inline-block; }
-        #prabu-tablet { background: #d4af37; color: #000; padding: 5px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; margin-top: 5px; display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        /* PRABU ANIMATION: Stand, Turn, and Speak */
+        .prabu-container { text-align: center; margin-bottom: 20px; perspective: 1000px; }
         
-        h1 { color: #d4af37; text-align: center; font-size: 1.8rem; letter-spacing: 4px; margin: 10px 0; text-transform: uppercase; }
-        .subtitle { text-align: center; font-size: 0.75rem; color: #777; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 25px; border-bottom: 1px solid #222; padding-bottom: 15px; }
+        .prabu-img { 
+            font-size: 65px; 
+            display: inline-block; 
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: scaleY(0.8); /* Starting "sitting" position */
+            cursor: pointer;
+        }
+
+        /* The "Stand and Turn" effect when the button is clicked */
+        .prabu-active { 
+            transform: scaleY(1.1) rotateY(360deg) translateY(-10px) !important; 
+        }
+
+        #prabu-tablet { 
+            background: #d4af37; color: #000; padding: 10px 15px; border-radius: 10px;
+            font-size: 0.8rem; font-weight: bold; display: none; margin: 15px auto;
+            max-width: 80%; box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+            border: 2px solid #fff; position: relative;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        h1 { color: #d4af37; text-align: center; font-size: 1.8rem; letter-spacing: 5px; margin: 10px 0; text-transform: uppercase; }
+        .subtitle { text-align: center; font-size: 0.75rem; color: #666; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 25px; border-bottom: 1px solid #222; padding-bottom: 15px; }
         
         .input-group { display: flex; flex-direction: column; gap: 12px; }
         label { color: #d4af37; font-size: 0.7rem; text-transform: uppercase; margin-bottom: -5px; letter-spacing: 1px; }
-        select, input { padding: 15px; background: #1a1a1a; border: 1px solid #333; color: #fff; font-size: 1rem; border-radius: 4px; width: 100%; box-sizing: border-box; }
+        select, input { padding: 15px; background: #0a0a0a; border: 1px solid #333; color: #fff; font-size: 1rem; border-radius: 6px; width: 100%; box-sizing: border-box; }
         
-        button { padding: 18px; background: #4b0082; border: 1px solid #d4af37; color: #fff; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; border-radius: 4px; }
+        button { padding: 20px; background: #300050; border: 1px solid #d4af37; color: #fff; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; border-radius: 6px; letter-spacing: 2px; }
         button:hover { background: #d4af37; color: #000; }
-        .prabu-btn { background: #222; border: 1px solid #444; font-size: 0.75rem; color: #999; margin-top: 10px; }
+        .secondary-btn { background: #1a1a1a; border: 1px solid #444; font-size: 0.75rem; color: #888; padding: 12px; }
 
-        #output { margin-top: 30px; line-height: 1.7; color: #eee; font-size: 1.05rem; border-top: 1px dashed #333; padding-top: 20px; }
+        #output { margin-top: 35px; line-height: 1.8; color: #ddd; font-size: 1.05rem; border-top: 1px solid #222; padding-top: 25px; }
     </style>
 </head>
 <body>
     <div class="terminal">
         <div class="prabu-container">
-            <div class="prabu-img" onclick="prabuSuggests()">🪳🧢</div>
+            <div class="prabu-img" id="prabu-sprite">🪳🧢</div>
             <div id="prabu-tablet">DO YOU WANT ME TO ASK A QUESTION?</div>
         </div>
         
         <h1>ASK BABAJI</h1>
-        <div class="subtitle">Dredging the Silt of Tradition</div>
+        <div class="subtitle">Dredging the Silt of Universal Tradition</div>
 
         <div class="input-group">
             <label>Tradition</label>
             <select id="tradition">
-                <option value="Buddhism (Nikaya & Mahayana)">Buddhism (Nikaya & Mahayana)</option>
-                <option value="Tibetan/Tantric (Vajrayana)">Tibetan/Tantric (Vajrayana)</option>
-                <option value="Hellenic (Pre-Socratic/Platonic)">Hellenic (Pre-Socratic/Platonic)</option>
-                <option value="Vedic/Upanishadic">Vedic/Upanishadic</option>
-                <option value="Germanic/Norse Philology">Germanic/Norse Philology</option>
+                <option value="Buddhism (Zen/Mahayana)">Buddhism (Zen/Mahayana)</option>
+                <option value="Daoism (Classical Taoism)">Sinological/Daoism (Tao)</option>
+                <option value="Kabbalistic (Jewish Mysticism)">Kabbalistic (Kabbalah)</option>
+                <option value="Tibetan (Vajrayana/Dzogchen)">Tibetan (Vajrayana/Dzogchen)</option>
+                <option value="Vedic/Advaita Vedanta">Vedic (Upanishadic)</option>
+                <option value="Hellenic (Platonic/Hermetic)">Hellenic (Greek Philology)</option>
+                <option value="Sufi (Islamic Mysticism)">Sufism (Islamic Mysticism)</option>
+                <option value="Germanic/Norse (Eddas)">Germanic/Norse Philology</option>
                 <option value="Ancient Egyptian (Hermetic)">Ancient Egyptian (Hermetic)</option>
-                <option value="Slavic Philology/Etymology">Slavic Philology/Etymology</option>
-                <option value="Sinological/Daoist">Sinological/Daoist</option>
+                <option value="Slavic Philology">Slavic Philology</option>
+                <option value="Western Alchemy">Western Alchemy</option>
             </select>
 
             <label>Root Language</label>
             <select id="language">
-                <option value="English (Academic)">English (Academic)</option>
+                <option value="English">English</option>
+                <option value="Classical Chinese">Classical Chinese (中文)</option>
+                <option value="Hebrew">Hebrew (עברית)</option>
                 <option value="Sanskrit">Sanskrit (संस्कृतम्)</option>
-                <option value="Pali">Pali (पाऴि)</option>
                 <option value="Ancient Greek">Ancient Greek (Ἑλληνική)</option>
-                <option value="Old Norse">Old Norse (Dönsk tunga)</option>
-                <option value="Ancient Egyptian">Ancient Egyptian (Medu Netjer)</option>
-                <option value="Russian">Russian (Русский)</option>
+                <option value="Old Norse">Old Norse</option>
+                <option value="Arabic">Arabic/Persian</option>
+                <option value="Russian">Russian</option>
+                <option value="Egyptian">Egyptian (Medu Netjer)</option>
             </select>
 
             <label>Term for Analysis</label>
             <input type="text" id="userInput" placeholder="Enter word...">
             
             <button onclick="generateWisdom()">Dredge the Roots</button>
-            <button class="prabu-btn" onclick="prabuSuggests()">ASK PRABU FOR A QUESTION</button>
+            <button class="secondary-btn" onclick="prabuSuggests()">ASK PRABU FOR A QUESTION</button>
         </div>
         <div id="output">SYSTEM STATUS: READY.</div>
     </div>
 
     <script>
         function prabuSuggests() {
+            const prabu = document.getElementById('prabu-sprite');
             const tablet = document.getElementById('prabu-tablet');
-            const qs = ["Root of 'Sattva'?", "Etymology of 'Yggdrasil'?", "Egyptian 'Maat'?", "Slavic 'Vera'?", "Explain 'Logos'."];
+            
+            // Stand up and Turn Around animation
+            prabu.classList.add('prabu-active');
+            
+            const qs = [
+                "Explain the root of 'Wu Wei'?", 
+                "Etymology of the Sephirah 'Binah'?", 
+                "How does 'Logos' relate to 'Maat'?", 
+                "Root of Slavic 'Vera'?", 
+                "What is the Alchemy of 'Vitriol'?",
+                "Analyze the Sanskrit 'Sattva'?"
+            ];
             const choice = qs[Math.floor(Math.random() * qs.length)];
             
-            tablet.style.display = 'inline-block';
-            tablet.innerText = "PRABU WRITES: " + choice;
-            document.getElementById('userInput').value = choice;
-            
-            setTimeout(() => { tablet.style.display = 'none'; }, 5000);
+            // Show tablet after the "turn"
+            setTimeout(() => {
+                tablet.style.display = 'block';
+                tablet.innerText = "PRABU WRITES: " + choice;
+                document.getElementById('userInput').value = choice;
+            }, 400);
+
+            // Reset Prabu after a while
+            setTimeout(() => {
+                prabu.classList.remove('prabu-active');
+                tablet.style.display = 'none';
+            }, 7000);
         }
 
         async function generateWisdom() {
@@ -92,11 +136,10 @@
             const lang = document.getElementById('language').value;
             const output = document.getElementById('output');
 
-            if (!word) { alert("Please enter a term."); return; }
+            if (!word) return;
             output.innerHTML = "<span style='color:#d4af37'>Dredging the silt...</span>";
 
             try {
-                // We use the full path to make sure it finds the API
                 const response = await fetch('/api/analyze', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -105,8 +148,8 @@
 
                 const data = await response.json();
                 const rawText = data.analysis || (data.candidates && data.candidates[0].content.parts[0].text);
-                output.innerHTML = marked.parse(rawText || "The silt is empty here.");
-                MathJax.typeset();
+                output.innerHTML = marked.parse(rawText || "Silence from the deep.");
+                if(window.MathJax) MathJax.typeset();
             } catch (e) {
                 output.innerHTML = "<span style='color:red'>Dredge Failure: Connection lost.</span>";
             }
