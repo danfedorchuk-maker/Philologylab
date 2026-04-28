@@ -12,7 +12,8 @@ export default async function handler(req, res) {
 // Replace your current fetch line with this one:
 // This is the newest version in the fleet:
 // This is the direct 3.1 line the system is demanding:
-const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash:generateContent?key=${apiKey}`, {
+// This moves us out of beta and into the stable production line:
+const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
