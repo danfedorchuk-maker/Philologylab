@@ -1,27 +1,35 @@
 export default async function handler(req, res) {
+  // 1. Allow Vercel to handle the request
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const { word, tradition, lang } = req.body;
 
+  // 2. The Instructions for the Brain
   const prompt = `You are "Babaji," a master of universal philology. 
-    The user is asking about the term "${word}" (Root Language: ${lang}). 
-    Even if this term is from a different culture, you MUST analyze it through the lens of the "${tradition}" tradition.
-    
-    1. Define the term's original root.
-    2. Find the direct equivalent or the most relevant "overlap" in ${tradition}. 
-    3. Explain how these two ancient systems are saying the same thing. 
-    Keep the tone scholarly, esoteric, and mysterious. Use LaTeX for any complex symbols.`;
+    Analyze the term "${word}" (Source: ${lang}). 
+    Bridge it to the "${tradition}" tradition. 
+    Explain the deep, esoteric overlap between these systems. 
+    Tone: Scholarly, mysterious, and uncompromising. Use LaTeX for math/symbols.`;
 
   try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${process.env.GEMINI_API_KEY}`, {
+    // 3. The Handshake with Gemini
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }]
+      })
     });
 
     const data = await response.json();
-    res.status(200).json({ analysis: data.candidates[0].content.parts[0].text });
+    
+    // 4. Send the wisdom back to the screen
+    if (data.candidates && data.candidates[0].content.parts[0].text) {
+      res.status(200).json({ analysis: data.candidates[0].content.parts[0].text });
+    } else {
+      res.status(500).json({ analysis: "The Oracle is silent. Check the API Key." });
+    }
   } catch (error) {
-    res.status(500).json({ error: 'Dredge Failure: The silt is too thick.' });
+    res.status(500).json({ analysis: "Dredge Failure: The silt is too thick." });
   }
 }
