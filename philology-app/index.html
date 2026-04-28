@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,76 +9,97 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         body { background-color: #0f0f0f; color: #d4d4d4; font-family: 'Georgia', serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .terminal { background-color: #1a1a1a; padding: 40px; border-radius: 4px; border: 1px solid #333; width: 100%; max-width: 950px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); margin-top: 50px; box-sizing: border-box; }
-        h1 { color: #d4af37; letter-spacing: 4px; text-align: center; margin-bottom: 5px; text-transform: uppercase; font-size: 2.5rem; }
-        .subtitle { text-align: center; font-size: 0.8rem; color: #666; margin-bottom: 30px; letter-spacing: 2px; text-transform: uppercase; }
-        .prabu-box { text-align: center; margin-bottom: 25px; border-bottom: 1px solid #222; padding-bottom: 20px; }
-        .prabu-avatar { font-size: 50px; margin-bottom: 10px; display: block; }
-        .prabu-speech { color: #d4af37; font-style: italic; font-size: 0.9rem; }
-        .input-group { display: flex; flex-direction: column; gap: 15px; width: 100%; }
-        select, input { width: 100%; padding: 15px; background: #111; border: 1px solid #444; color: #fff; font-size: 1rem; box-sizing: border-box; font-family: 'Georgia', serif; }
-        button { width: 100%; padding: 20px; margin-top: 10px; background-color: #4b0082; border: 1px solid #d4af37; color: #fff; font-weight: bold; cursor: pointer; letter-spacing: 2px; text-transform: uppercase; transition: 0.3s; }
-        button:hover { background-color: #d4af37; color: #000; }
-        .prabu-btn { background-color: #222; border: 1px solid #444; padding: 10px; font-size: 0.7rem; color: #888; }
-        #output { margin-top: 40px; line-height: 1.8; color: #ccc; border-top: 1px dashed #444; padding-top: 30px; font-size: 1.1rem; }
+        .terminal { background-color: #1a1a1a; padding: 40px; border-radius: 8px; border: 2px solid #d4af37; width: 100%; max-width: 900px; box-shadow: 0 0 30px rgba(212, 175, 55, 0.1); margin-top: 30px; box-sizing: border-box; }
+        
+        /* Prabu Animation */
+        @keyframes hover { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+        .prabu-container { text-align: center; margin-bottom: 30px; }
+        .prabu-img { font-size: 60px; display: inline-block; animation: hover 3s ease-in-out infinite; cursor: pointer; }
+        
+        h1 { color: #d4af37; letter-spacing: 6px; text-align: center; margin: 10px 0; text-transform: uppercase; font-size: 2.2rem; text-shadow: 2px 2px 4px #000; }
+        .subtitle { text-align: center; font-size: 0.85rem; color: #888; margin-bottom: 30px; letter-spacing: 3px; text-transform: uppercase; border-bottom: 1px solid #333; padding-bottom: 15px; }
+
+        .input-group { display: flex; flex-direction: column; gap: 15px; }
+        label { color: #d4af37; font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; margin-bottom: -10px; }
+        select, input { width: 100%; padding: 15px; background: #111; border: 1px solid #444; color: #fff; font-size: 1rem; font-family: 'Georgia', serif; border-radius: 4px; }
+        
+        button { width: 100%; padding: 20px; background-color: #4b0082; border: 1px solid #d4af37; color: #fff; font-weight: bold; cursor: pointer; letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s; margin-top: 10px; }
+        button:hover { background-color: #d4af37; color: #000; box-shadow: 0 0 15px #d4af37; }
+        .secondary-btn { background: #222; border: 1px solid #444; padding: 10px; font-size: 0.75rem; color: #aaa; margin-top: 5px; }
+
+        #output { margin-top: 40px; line-height: 1.8; color: #ccc; border-top: 1px dashed #444; padding-top: 30px; }
     </style>
 </head>
 <body>
+
     <div class="terminal">
-        <div class="prabu-box">
-            <span class="prabu-avatar">🪳🧢</span>
+        <div class="prabu-container">
+            <div class="prabu-img">🪳🧢</div>
             <h1>ASK BABAJI</h1>
-            <div class="subtitle">Dredging the Silt of Language & Tradition</div>
-            <p class="prabu-speech">"Yo, I'm Prabu. Pick a root and let's get digging."</p>
+            <div class="subtitle">Dredging the Silt of Tradition</div>
+            <p style="color: #d4af37; font-style: italic;">"Yo, I'm Prabu. Let's dig up some roots."</p>
         </div>
+
         <div class="input-group">
+            <label>Tradition</label>
             <select id="tradition">
                 <option value="Buddhism (Nikaya & Mahayana)">Buddhism (Nikaya & Mahayana)</option>
-                <option value="Tibetan/Tantric Buddhism (Vajrayana)">Tibetan/Tantric Buddhism (Vajrayana)</option>
+                <option value="Tibetan/Tantric (Vajrayana)">Tibetan/Tantric (Vajrayana)</option>
                 <option value="Hellenic (Pre-Socratic/Platonic)">Hellenic (Pre-Socratic/Platonic)</option>
                 <option value="Vedic/Upanishadic">Vedic/Upanishadic</option>
-                <option value="Hermetic/Alchemical">Hermetic/Alchemical</option>
-                <option value="Slavic Philology/Etymology">Slavic Philology/Etymology</option>
                 <option value="Germanic/Norse Philology">Germanic/Norse Philology</option>
-                <option value="Ancient Egyptian (Hermetic/Mythic)">Ancient Egyptian (Hermetic/Mythic)</option>
+                <option value="Ancient Egyptian (Hermetic)">Ancient Egyptian (Hermetic)</option>
+                <option value="Slavic Philology/Etymology">Slavic Philology/Etymology</option>
                 <option value="Sinological/Daoist">Sinological/Daoist</option>
             </select>
+
+            <label>Language</label>
             <select id="language">
-                <option value="English (Academic)">English (Academic)</option>
-                <option value="Russian">Russian (Русский)</option>
+                <option value="English (Academic)">English</option>
                 <option value="Sanskrit">Sanskrit (संस्कृतम्)</option>
                 <option value="Pali">Pali (पाऴि)</option>
                 <option value="Ancient Greek">Ancient Greek (Ἑλληνική)</option>
                 <option value="Old Norse">Old Norse (Dönsk tunga)</option>
                 <option value="Ancient Egyptian">Egyptian (Medu Netjer)</option>
+                <option value="Russian">Russian (Русский)</option>
                 <option value="Old Church Slavonic">Old Church Slavonic</option>
             </select>
-            <input type="text" id="userInput" placeholder="Enter Term for Analysis...">
+
+            <label>Term for Analysis</label>
+            <input type="text" id="userInput" placeholder="Type a word...">
+            
             <button onclick="generateWisdom()">Dredge the Roots</button>
-            <button class="prabu-btn" onclick="prabuSuggests()">ASK PRABU FOR A QUESTION</button>
+            <button class="secondary-btn" onclick="prabuSuggests()">ASK PRABU FOR A QUESTION</button>
         </div>
+
         <div id="output">SYSTEM STATUS: READY. Awaiting ontological input...</div>
     </div>
+
     <script>
         function prabuSuggests() {
-            const qs = ["What is the root of 'Sattva'?", "Dredge Norse 'Yggdrasil' for me.", "How does Egyptian 'Maat' relate to the Logos?", "What's the Slavic root for 'Vera'?", "Explain the Alchemy of 'Vitriol'."];
+            const qs = ["Root of 'Sattva'?", "Norse 'Yggdrasil'?", "Egyptian 'Maat' vs Logos?", "Slavic root of 'Vera'?", "Alchemy of 'Vitriol'?"];
             document.getElementById('userInput').value = qs[Math.floor(Math.random() * qs.length)];
         }
+
         async function generateWisdom() {
             const word = document.getElementById('userInput').value;
             const tradition = document.getElementById('tradition').value;
             const lang = document.getElementById('language').value;
             const output = document.getElementById('output');
+
             if (!word) { alert("Input Required."); return; }
             output.innerHTML = "<i style='color:#d4af37'>Dredging the silt...</i>";
+
             try {
                 const response = await fetch('/api/analyze', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ word, tradition, lang })
                 });
+
                 const data = await response.json();
                 const rawText = data.analysis || (data.candidates && data.candidates[0].content.parts[0].text);
+                
                 if (rawText) {
                     output.innerHTML = marked.parse(rawText);
                     MathJax.typeset();
