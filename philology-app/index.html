@@ -84,30 +84,41 @@
         function prabuSuggests() {
     const prabu = document.getElementById('prabu-sprite');
     const tablet = document.getElementById('prabu-tablet');
+    const currentWord = document.getElementById('userInput').value.toLowerCase();
     
-    // Stand up and Turn Around animation
     prabu.classList.add('prabu-active');
     
-    const qs = [
-        "Explain the root of 'Wu Wei'?", 
-        "Etymology of the Sephirah 'Binah'?", 
-        "How does 'Logos' relate to 'Maat'?", 
-        "Root of Slavic 'Vera'?", 
-        "What is the Alchemy of 'Vitriol'?",
-        "Analyze the Sanskrit 'Sattva'?"
-    ];
-    const choice = qs[Math.floor(Math.random() * qs.length)];
+    // Context-aware suggestions
+    let suggestion = "the PIE root of 'Vera'?"; // Default
+
+    if (currentWord.includes("suffer") || currentWord.includes("pain")) {
+        suggestion = "the Sanskrit roots of 'Dukkha'?";
+    } else if (currentWord.includes("binah") || currentWord.includes("sephirah")) {
+        suggestion = "the connection between 'Binah' and 'Chokhmah'?";
+    } else if (currentWord.includes("zen") || currentWord.includes("dao")) {
+        suggestion = "the etymology of 'Zazen'?";
+    } else if (currentWord.includes("love") || currentWord.includes("vera")) {
+        suggestion = "the Proto-Indo-European root of 'Amare'?";
+    } else {
+        // Random fallback if no match
+        const general = [
+            "the root of 'Wu Wei'?", 
+            "the etymology of 'Logos'?", 
+            "the Alchemy of 'Vitriol'?",
+            "the Slavic root of 'Vera'?"
+        ];
+        suggestion = general[Math.floor(Math.random() * general.length)];
+    }
     
-    // Show tablet with a full sentence
     setTimeout(() => {
         tablet.style.display = 'block';
-        // This line adds the sentence structure:
-        tablet.innerText = "PRABU SAYS: 'Hey Merchant, why don't you " + choice.charAt(0).toLowerCase() + choice.slice(1) + "'";
+        // Updated to "Hey friend" and smoother sentence structure
+        tablet.innerText = "PRABU SAYS: 'Hey friend, why don't you ask about " + suggestion + "'";
         
-        document.getElementById('userInput').value = choice;
+        // Auto-fill the input with the suggestion
+        document.getElementById('userInput').value = suggestion.replace('?', '').replace('the ', '');
     }, 400);
 
-    // Reset Prabu after a while
     setTimeout(() => {
         prabu.classList.remove('prabu-active');
         tablet.style.display = 'none';
