@@ -82,32 +82,37 @@
 
     <script>
         function prabuSuggests() {
-            const prabu = document.getElementById('prabu-sprite');
-            const tablet = document.getElementById('prabu-tablet');
-            prabu.classList.add('prabu-active');
-            
-            const qs = [
-                "Explain the root of 'Wu Wei'?", 
-                "Etymology of the Sephirah 'Binah'?", 
-                "How does 'Logos' relate to 'Maat'?", 
-                "Root of Slavic 'Vera'?", 
-                "What is the Alchemy of 'Vitriol'?",
-                "Analyze the Sanskrit 'Sattva'?"
-            ];
-            const choice = qs[Math.floor(Math.random() * qs.length)];
-            
-            setTimeout(() => {
-                tablet.style.display = 'block';
-                tablet.innerText = "PRABU WRITES: " + choice;
-                document.getElementById('userInput').value = choice;
-            }, 400);
+    const prabu = document.getElementById('prabu-sprite');
+    const tablet = document.getElementById('prabu-tablet');
+    
+    // Stand up and Turn Around animation
+    prabu.classList.add('prabu-active');
+    
+    const qs = [
+        "Explain the root of 'Wu Wei'?", 
+        "Etymology of the Sephirah 'Binah'?", 
+        "How does 'Logos' relate to 'Maat'?", 
+        "Root of Slavic 'Vera'?", 
+        "What is the Alchemy of 'Vitriol'?",
+        "Analyze the Sanskrit 'Sattva'?"
+    ];
+    const choice = qs[Math.floor(Math.random() * qs.length)];
+    
+    // Show tablet with a full sentence
+    setTimeout(() => {
+        tablet.style.display = 'block';
+        // This line adds the sentence structure:
+        tablet.innerText = "PRABU SAYS: 'Hey Merchant, why don't you " + choice.charAt(0).toLowerCase() + choice.slice(1) + "'";
+        
+        document.getElementById('userInput').value = choice;
+    }, 400);
 
-            setTimeout(() => {
-                prabu.classList.remove('prabu-active');
-                tablet.style.display = 'none';
-            }, 7000);
-        }
-
+    // Reset Prabu after a while
+    setTimeout(() => {
+        prabu.classList.remove('prabu-active');
+        tablet.style.display = 'none';
+    }, 7000);
+}
         async function generateWisdom() {
             const word = document.getElementById('userInput').value;
             const tradition = document.getElementById('tradition').value;
