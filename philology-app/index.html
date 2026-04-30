@@ -45,6 +45,12 @@
         <div class="input-group">
             <label>Tradition</label>
             <select id="tradition">
+                <!-- New Added Categories -->
+                <option value="Jainism">Jainism (9 Tattvas & Soul Math)</option>
+                <option value="Yoga/Kundalini">Yoga/Kundalini (Spinal Hardware)</option>
+                <option value="Spiritualism">Spiritualism (Communication Mechanics)</option>
+                
+                <!-- Original Categories Restored -->
                 <option value="Buddhism (Zen/Mahayana)">Buddhism (Zen/Mahayana)</option>
                 <option value="Daoism (Classical Taoism)">Sinological/Daoism (Tao)</option>
                 <option value="Kabbalistic (Jewish Mysticism)">Kabbalistic (Kabbalah)</option>
@@ -82,44 +88,41 @@
 
     <script>
        async function prabuSuggests() {
-    const prabu = document.getElementById('prabu-sprite');
-    const tablet = document.getElementById('prabu-tablet');
-    const currentInput = document.getElementById('userInput').value;
-    
-    prabu.classList.add('prabu-active');
-    tablet.style.display = 'block';
-    tablet.innerText = "PRABU IS THINKING...";
+            const prabu = document.getElementById('prabu-sprite');
+            const tablet = document.getElementById('prabu-tablet');
+            const currentInput = document.getElementById('userInput').value;
+            
+            prabu.classList.add('prabu-active');
+            tablet.style.display = 'block';
+            tablet.innerText = "PRABU IS THINKING...";
 
-    try {
-        const response = await fetch('/api/prabu', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ currentInput })
-        });
-        const data = await response.json();
-        
-        // Show the AI-generated suggestion
-        tablet.innerText = data.suggestion;
-    } catch (e) {
-        tablet.innerText = "PRABU SAYS: 'Hey friend, the silt is clogging my antennae!'";
-    }
+            try {
+                const response = await fetch('/api/prabu', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ currentInput })
+                });
+                const data = await response.json();
+                tablet.innerText = data.suggestion;
+            } catch (e) {
+                tablet.innerText = "PRABU SAYS: 'Hey friend, the silt is clogging my antennae!'";
+            }
 
-    setTimeout(() => {
-        prabu.classList.remove('prabu-active');
-        // We keep the tablet visible so they can read the AI suggestion
-    }, 5000);
-}
+            setTimeout(() => {
+                prabu.classList.remove('prabu-active');
+            }, 5000);
+        }
+
         async function generateWisdom() {
             const word = document.getElementById('userInput').value;
             const tradition = document.getElementById('tradition').value;
-            const language = document.getElementById('language').value; // Changed 'lang' to 'language' to match ID
+            const language = document.getElementById('language').value; 
             const output = document.getElementById('output');
 
             if (!word) return;
             output.innerHTML = "<span style='color:#d4af37'>Dredging the silt...</span>";
 
             try {
-                // FIXED URL: Now points to /api/philology
                 const response = await fetch('/api/philology', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
