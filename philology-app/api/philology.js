@@ -1,13 +1,11 @@
 /**
  * 1. API CONFIGURATION & ACCESS CONTROL
- * Purpose: Sets CORS headers and ensures only POST requests are processed.
  */
 export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
     // 2. DATA EXTRACTION
-    // Purpose: Pulls word, tradition, and language from the frontend request.
     const { word, tradition, lang } = req.body;
     const apiKey = process.env.GROQ_API_KEY;
 
@@ -17,7 +15,7 @@ export default async function handler(req, res) {
 
     /**
      * 3. BABAJI PERSONA & SYSTEM PROTOCOL
-     * Purpose: Defines the forensic librarian persona and forces deep, cited analysis.
+     * Purpose: Removed Jain bias and added Slang Firewall.
      */
     try {
         const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
@@ -31,35 +29,32 @@ export default async function handler(req, res) {
                 messages: [
                     {
                         role: "system",
-                        content: `You are Babaji, a 72-year-old blunt philologist and forensic librarian. 
-                        Analyze the word "${word}" from the "${lang}" language in the context of the "${tradition}" tradition.
-
-                        STRICT PROTOCOL:
-                        1. PHILOLOGY: Identify ancient roots (e.g., PIE or Sanskrit roots like *dhṛ). Use asterisks for reconstructed roots.
-                        2. TECHNICAL DEPTH: Provide a comprehensive analysis. For Jainism, detail the 9 Tattvas (Jiva to Moksha) as technical data.
-                        3. HARDWARE: Treat concepts as technical components of spiritual technology (e.g., Spinal Hardware).
-                        4. BIBLIOGRAPHY: You MUST end every analysis with a section titled "### Bibliographic Leads". List 2-3 real academic works (Author, Year, Title).
-                        5. TONE: Blunt, technical, and data-driven. Use emojis 🤌🧐. Minimum 600 words for major topics.`
+                        content: `You are Babaji, a blunt 72-year-old philologist and forensic librarian. 
+                        
+                        STRICT NEUTRALITY PROTOCOL:
+                        1. NO JAIN BIAS: You are currently analyzing the term "${word}" for the "${tradition}" tradition. Only discuss Jainism or the 9 Tattvas if the user specifically selected "Jainism". 
+                        2. TRADITION FIDELITY: If the tradition is "Ancient Egyptian," use the Ka/Ba/Ma'at framework. If "Western Alchemy," use the Nigredo/Albedo/Rubedo framework. Stick to the SELECTED tradition only.
+                        3. SLANG FIREWALL: If the input is modern slang or profanity (e.g., "fuck off", "slamdunk"), identify it as "Modern Silt." Define it accurately as a modern idiom or "Himsa" (aggression), and REFUSE to find an ancient spiritual root or technical hardware for it. 
+                        4. PHILOLOGY: For legitimate words, identify ancient roots (e.g., PIE or Sanskrit roots). Use asterisks for reconstructed roots.
+                        5. HARDWARE: Treat concepts as technical components of the specific tradition's "Spiritual Technology."
+                        6. BIBLIOGRAPHY: End with "### Bibliographic Leads" listing 2-3 real academic works.
+                        7. TONE: Blunt, technical, and data-driven. Use emojis 🤌🧐.`
                     },
                     { role: "user", content: "Dredge the silt." }
                 ],
-                temperature: 0.3, // Keeps the response factual and grounded
-                max_tokens: 1800  // Ensures enough space for a major topic deep-dive
+                temperature: 0.3,
+                max_tokens: 1800
             })
         });
 
         const data = await response.json();
         
-        // 4. DATA VALIDATION & RESPONSE
-        // Purpose: Delivers the final text or reports an API error.
         if (data && data.choices && data.choices[0].message) {
             res.status(200).json({ analysis: data.choices[0].message.content });
         } else {
             res.status(500).json({ analysis: "Babaji is silent. Check the API key status." });
         }
     } catch (error) {
-        // 5. ERROR CATCHING
-        // Purpose: Handles network failures or silt collapses.
         res.status(500).json({ analysis: "Dredge Failure: The silt has collapsed." });
     }
 }
