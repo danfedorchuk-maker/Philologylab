@@ -1,13 +1,13 @@
 /**
- * 13. API CONFIGURATION & ACCESS CONTROL
+ * 1. API CONFIGURATION & ACCESS CONTROL
  * Purpose: Sets CORS headers and ensures only POST requests are processed.
  */
 export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-    // 14. DATA EXTRACTION
-    // Purpose: Pulls input from the frontend and the secure API key.
+    // 2. DATA EXTRACTION
+    // Purpose: Pulls word, tradition, and language from the frontend request.
     const { word, tradition, lang } = req.body;
     const apiKey = process.env.GROQ_API_KEY;
 
@@ -16,8 +16,8 @@ export default async function handler(req, res) {
     }
 
     /**
-     * 15. BABAJI PERSONA & SYSTEM PROTOCOL
-     * Purpose: Forces deep, technical, and cited philological analysis.
+     * 3. BABAJI PERSONA & SYSTEM PROTOCOL
+     * Purpose: Defines the forensic librarian persona and forces deep, cited analysis.
      */
     try {
         const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
@@ -35,30 +35,31 @@ export default async function handler(req, res) {
                         Analyze the word "${word}" from the "${lang}" language in the context of the "${tradition}" tradition.
 
                         STRICT PROTOCOL:
-                        1. PHILOLOGY: Identify ancient roots (e.g., PIE, Sanskrit roots like *dhṛ or *kṛ). Use asterisks for reconstructed roots. Use MathJax/LaTeX for linguistic formulas.
-                        2. TECHNICAL DEPTH: Provide a comprehensive analysis. If analyzing Jainism, detail the 9 Tattvas or "Soul Math" with technical density. Do not offer a "lite" summary.
-                        3. HARDWARE: Treat concepts as technical components of spiritual technology or biological throughput (e.g., Spinal Hardware).
-                        4. BIBLIOGRAPHY: You MUST end every analysis with a section titled "### Bibliographic Leads". List 2-3 real academic works (Author, Year, Title) supporting this data.
-                        5. TONE: Blunt, technical, forensic, and data-driven. Use emojis 🤌🧐. Use about 500-800 words for major topics.`
+                        1. PHILOLOGY: Identify ancient roots (e.g., PIE or Sanskrit roots like *dhṛ). Use asterisks for reconstructed roots.
+                        2. TECHNICAL DEPTH: Provide a comprehensive analysis. For Jainism, detail the 9 Tattvas (Jiva to Moksha) as technical data.
+                        3. HARDWARE: Treat concepts as technical components of spiritual technology (e.g., Spinal Hardware).
+                        4. BIBLIOGRAPHY: You MUST end every analysis with a section titled "### Bibliographic Leads". List 2-3 real academic works (Author, Year, Title).
+                        5. TONE: Blunt, technical, and data-driven. Use emojis 🤌🧐. Minimum 600 words for major topics.`
                     },
                     { role: "user", content: "Dredge the silt." }
                 ],
-                temperature: 0.3, // Keeps the librarian factual
-                max_tokens: 1500  // Ensures the output doesn't get cut off mid-thought
+                temperature: 0.3, // Keeps the response factual and grounded
+                max_tokens: 1800  // Ensures enough space for a major topic deep-dive
             })
         });
 
         const data = await response.json();
         
-        // 16. DATA VALIDATION & RESPONSE
-        // Purpose: Delivers the dredged content or reports a silence in the deep.
+        // 4. DATA VALIDATION & RESPONSE
+        // Purpose: Delivers the final text or reports an API error.
         if (data && data.choices && data.choices[0].message) {
             res.status(200).json({ analysis: data.choices[0].message.content });
         } else {
             res.status(500).json({ analysis: "Babaji is silent. Check the API key status." });
         }
     } catch (error) {
-        // 17. ERROR CATCHING
+        // 5. ERROR CATCHING
+        // Purpose: Handles network failures or silt collapses.
         res.status(500).json({ analysis: "Dredge Failure: The silt has collapsed." });
     }
 }
