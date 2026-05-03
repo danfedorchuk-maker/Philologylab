@@ -1,11 +1,16 @@
+<!-- 1. DOCUMENT HEADER AND METADATA -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Ask Babaji: Universal Philology</title>
+
+    <!-- 2. EXTERNAL RESOURCE LIBRARIES -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- 3. CSS STYLING AND THEME -->
     <style>
         body { background-color: #050505; color: #d4d4d4; font-family: 'Georgia', serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
         .terminal { background-color: #111; padding: 30px; border: 1px solid #d4af37; width: 100%; max-width: 550px; box-shadow: 0 0 25px rgba(212, 175, 55, 0.15); border-radius: 12px; margin-top: 20px; box-sizing: border-box; position: relative; }
@@ -30,21 +35,23 @@
         .secondary-btn { background: #1a1a1a; border: 1px solid #444; font-size: 0.75rem; color: #888; padding: 12px; }
 
         #output { margin-top: 35px; line-height: 1.8; color: #ddd; font-size: 1.05rem; border-top: 1px solid #222; padding-top: 25px; }
-        
-        /* New Citation Styling */
-        .bib-container { margin-top: 20px; padding: 15px; background: rgba(212, 175, 55, 0.05); border-left: 3px solid #d4af37; }
     </style>
 </head>
+
+<!-- 4. MAIN USER INTERFACE BODY -->
 <body>
     <div class="terminal">
+        <!-- 5. PRABU MASCOT AND TABLET CONTAINER -->
         <div class="prabu-container">
             <div class="prabu-img" id="prabu-sprite">🪳🧢</div>
             <div id="prabu-tablet">DO YOU WANT ME TO ASK A QUESTION?</div>
         </div>
         
+        <!-- 6. APPLICATION TITLES -->
         <h1>ASK BABAJI</h1>
         <div class="subtitle">Dredging the Silt of Universal Tradition</div>
 
+        <!-- 7. USER INPUT FORM AREA -->
         <div class="input-group">
             <label>Tradition</label>
             <select id="tradition">
@@ -83,15 +90,14 @@
             <button onclick="generateWisdom()">Dredge the Roots</button>
             <button class="secondary-btn" onclick="prabuSuggests()">ASK PRABU FOR A QUESTION</button>
         </div>
+
+        <!-- 8. ANALYSIS OUTPUT DISPLAY AREA -->
         <div id="output">SYSTEM STATUS: READY.</div>
     </div>
 
+    <!-- 9. SCRIPTING AND API LOGIC -->
     <script>
-        /**
-         * SECTION 1: PRABU INTERACTION LOGIC
-         * Function: prabuSuggests()
-         * Purpose: Handles the mascot animation and suggestion retrieval.
-         */
+        // 10. FUNCTION: prabuSuggests() - Mascot Suggestions
         async function prabuSuggests() {
             const prabu = document.getElementById('prabu-sprite');
             const tablet = document.getElementById('prabu-tablet');
@@ -118,11 +124,7 @@
             }, 5000);
         }
 
-        /**
-         * SECTION 2: PHILOLOGY ANALYSIS LOGIC
-         * Function: generateWisdom()
-         * Purpose: Sends user input to the backend and renders academic analysis with citations.
-         */
+        // 11. FUNCTION: generateWisdom() - Main Analysis Request
         async function generateWisdom() {
             const word = document.getElementById('userInput').value;
             const tradition = document.getElementById('tradition').value;
@@ -133,8 +135,6 @@
             output.innerHTML = "<span style='color:#d4af37'>Dredging the silt...</span>";
 
             try {
-                // NOTE: Ensure your backend prompt is updated to include:
-                // "End every analysis with a '### Bibliographic Leads' section citing 2-3 real academic works."
                 const response = await fetch('/api/philology', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -144,14 +144,9 @@
                 const data = await response.json();
                 const rawText = data.analysis;
 
-                // SECTION 3: RENDERING & MATHJAX PROCESSING
-                // Purpose: Convert Markdown to HTML and trigger MathJax for linguistic symbols.
-                if (rawText) {
-                    output.innerHTML = marked.parse(rawText);
-                    if(window.MathJax) MathJax.typeset();
-                } else {
-                    output.innerHTML = "Silence from the deep.";
-                }
+                // 12. RENDERING RESULT: Marked & MathJax Processing
+                output.innerHTML = marked.parse(rawText || "Silence from the deep.");
+                if(window.MathJax) MathJax.typeset();
             } catch (e) {
                 output.innerHTML = "<span style='color:red'>Dredge Failure: Connection lost.</span>";
             }
