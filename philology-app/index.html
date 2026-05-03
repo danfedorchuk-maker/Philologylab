@@ -30,6 +30,9 @@
         .secondary-btn { background: #1a1a1a; border: 1px solid #444; font-size: 0.75rem; color: #888; padding: 12px; }
 
         #output { margin-top: 35px; line-height: 1.8; color: #ddd; font-size: 1.05rem; border-top: 1px solid #222; padding-top: 25px; }
+        
+        /* New Citation Styling */
+        .bib-container { margin-top: 20px; padding: 15px; background: rgba(212, 175, 55, 0.05); border-left: 3px solid #d4af37; }
     </style>
 </head>
 <body>
@@ -45,12 +48,9 @@
         <div class="input-group">
             <label>Tradition</label>
             <select id="tradition">
-                <!-- New Added Categories -->
                 <option value="Jainism">Jainism (9 Tattvas & Soul Math)</option>
                 <option value="Yoga/Kundalini">Yoga/Kundalini (Spinal Hardware)</option>
                 <option value="Spiritualism">Spiritualism (Communication Mechanics)</option>
-                
-                <!-- Original Categories Restored -->
                 <option value="Buddhism (Zen/Mahayana)">Buddhism (Zen/Mahayana)</option>
                 <option value="Daoism (Classical Taoism)">Sinological/Daoism (Tao)</option>
                 <option value="Kabbalistic (Jewish Mysticism)">Kabbalistic (Kabbalah)</option>
@@ -87,7 +87,12 @@
     </div>
 
     <script>
-       async function prabuSuggests() {
+        /**
+         * SECTION 1: PRABU INTERACTION LOGIC
+         * Function: prabuSuggests()
+         * Purpose: Handles the mascot animation and suggestion retrieval.
+         */
+        async function prabuSuggests() {
             const prabu = document.getElementById('prabu-sprite');
             const tablet = document.getElementById('prabu-tablet');
             const currentInput = document.getElementById('userInput').value;
@@ -113,6 +118,11 @@
             }, 5000);
         }
 
+        /**
+         * SECTION 2: PHILOLOGY ANALYSIS LOGIC
+         * Function: generateWisdom()
+         * Purpose: Sends user input to the backend and renders academic analysis with citations.
+         */
         async function generateWisdom() {
             const word = document.getElementById('userInput').value;
             const tradition = document.getElementById('tradition').value;
@@ -123,6 +133,8 @@
             output.innerHTML = "<span style='color:#d4af37'>Dredging the silt...</span>";
 
             try {
+                // NOTE: Ensure your backend prompt is updated to include:
+                // "End every analysis with a '### Bibliographic Leads' section citing 2-3 real academic works."
                 const response = await fetch('/api/philology', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -131,8 +143,15 @@
 
                 const data = await response.json();
                 const rawText = data.analysis;
-                output.innerHTML = marked.parse(rawText || "Silence from the deep.");
-                if(window.MathJax) MathJax.typeset();
+
+                // SECTION 3: RENDERING & MATHJAX PROCESSING
+                // Purpose: Convert Markdown to HTML and trigger MathJax for linguistic symbols.
+                if (rawText) {
+                    output.innerHTML = marked.parse(rawText);
+                    if(window.MathJax) MathJax.typeset();
+                } else {
+                    output.innerHTML = "Silence from the deep.";
+                }
             } catch (e) {
                 output.innerHTML = "<span style='color:red'>Dredge Failure: Connection lost.</span>";
             }
