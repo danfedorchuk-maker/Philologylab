@@ -1,4 +1,4 @@
-<!-- 1. DOCUMENT HEADER AND METADATA -->
+<!-- 1. DOCUMENT HEADER & METADATA -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,22 +10,25 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-    <!-- 3. CSS STYLING AND THEME -->
+    <!-- 3. CSS STYLING & THEME (Midnight Gold) -->
     <style>
         body { background-color: #050505; color: #d4d4d4; font-family: 'Georgia', serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
         .terminal { background-color: #111; padding: 30px; border: 1px solid #d4af37; width: 100%; max-width: 550px; box-shadow: 0 0 25px rgba(212, 175, 55, 0.15); border-radius: 12px; margin-top: 20px; box-sizing: border-box; position: relative; }
         
-        .prabu-container { text-align: center; margin-bottom: 20px; perspective: 1000px; }
-        .prabu-img { font-size: 65px; display: inline-block; transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform: scaleY(0.8); cursor: pointer; }
+        /* Mascot Styling: Prabu the Squirrel */
+        .prabu-container { text-align: center; margin-bottom: 20px; min-height: 80px; perspective: 1000px; }
+        .prabu-img { font-size: 65px; display: inline-block; transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; line-height: 1; }
         .prabu-active { transform: scaleY(1.1) rotateY(360deg) translateY(-10px) !important; }
 
         #prabu-tablet { background: #d4af37; color: #000; padding: 10px 15px; border-radius: 10px; font-size: 0.8rem; font-weight: bold; display: none; margin: 15px auto; max-width: 80%; box-shadow: 0 4px 15px rgba(0,0,0,0.6); border: 2px solid #fff; position: relative; animation: fadeIn 0.4s ease-out; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* Typography */
         h1 { color: #d4af37; text-align: center; font-size: 1.8rem; letter-spacing: 5px; margin: 10px 0; text-transform: uppercase; }
         .subtitle { text-align: center; font-size: 0.75rem; color: #666; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 25px; border-bottom: 1px solid #222; padding-bottom: 15px; }
         
+        /* Input & Form Styling */
         .input-group { display: flex; flex-direction: column; gap: 12px; }
         label { color: #d4af37; font-size: 0.7rem; text-transform: uppercase; margin-bottom: -5px; letter-spacing: 1px; }
         select, input { padding: 15px; background: #0a0a0a; border: 1px solid #333; color: #fff; font-size: 1rem; border-radius: 6px; width: 100%; box-sizing: border-box; }
@@ -41,17 +44,17 @@
 <!-- 4. MAIN USER INTERFACE BODY -->
 <body>
     <div class="terminal">
-        <!-- 5. PRABU MASCOT AND TABLET CONTAINER -->
+        <!-- 5. PRABU (SQUIRREL) MASCOT CONTAINER -->
         <div class="prabu-container">
-            <div class="prabu-img" id="prabu-sprite">🪳🧢</div>
-            <div id="prabu-tablet">DO YOU WANT ME TO ASK A QUESTION?</div>
+            <div class="prabu-img" id="prabu-sprite">🐿️🧢</div>
+            <div id="prabu-tablet">HEY FRIEND, WHAT SHALL WE GATHER TODAY?</div>
         </div>
         
-        <!-- 6. APPLICATION TITLES -->
+        <!-- 6. TITLES & SUBTITLES -->
         <h1>ASK BABAJI</h1>
         <div class="subtitle">Dredging the Silt of Universal Tradition</div>
 
-        <!-- 7. USER INPUT FORM AREA -->
+        <!-- 7. INPUT FIELD SELECTION -->
         <div class="input-group">
             <label>Tradition</label>
             <select id="tradition">
@@ -91,13 +94,13 @@
             <button class="secondary-btn" onclick="prabuSuggests()">ASK PRABU FOR A QUESTION</button>
         </div>
 
-        <!-- 8. ANALYSIS OUTPUT DISPLAY AREA -->
+        <!-- 8. ANALYSIS OUTPUT CONTAINER -->
         <div id="output">SYSTEM STATUS: READY.</div>
     </div>
 
-    <!-- 9. SCRIPTING AND API LOGIC -->
+    <!-- 9. APPLICATION SCRIPTING -->
     <script>
-        // 10. FUNCTION: prabuSuggests() - Mascot Suggestions
+        // 10. FUNCTION: prabuSuggests() - Mascot Suggestions Logic
         async function prabuSuggests() {
             const prabu = document.getElementById('prabu-sprite');
             const tablet = document.getElementById('prabu-tablet');
@@ -105,7 +108,7 @@
             
             prabu.classList.add('prabu-active');
             tablet.style.display = 'block';
-            tablet.innerText = "PRABU IS THINKING...";
+            tablet.innerText = "PRABU IS GATHERING...";
 
             try {
                 const response = await fetch('/api/prabu', {
@@ -116,7 +119,7 @@
                 const data = await response.json();
                 tablet.innerText = data.suggestion;
             } catch (e) {
-                tablet.innerText = "PRABU SAYS: 'Hey friend, the silt is clogging my antennae!'";
+                tablet.innerText = "PRABU SAYS: 'The silt is too deep here!'";
             }
 
             setTimeout(() => {
@@ -124,11 +127,11 @@
             }, 5000);
         }
 
-        // 11. FUNCTION: generateWisdom() - Main Analysis Request
+        // 11. FUNCTION: generateWisdom() - Main Philology Analysis Logic
         async function generateWisdom() {
             const word = document.getElementById('userInput').value;
             const tradition = document.getElementById('tradition').value;
-            const language = document.getElementById('language').value; 
+            const lang = document.getElementById('language').value; 
             const output = document.getElementById('output');
 
             if (!word) return;
@@ -138,13 +141,13 @@
                 const response = await fetch('/api/philology', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ word, tradition, language })
+                    body: JSON.stringify({ word, tradition, lang })
                 });
 
                 const data = await response.json();
                 const rawText = data.analysis;
 
-                // 12. RENDERING RESULT: Marked & MathJax Processing
+                // 12. RENDER PROCESS: Marked & MathJax
                 output.innerHTML = marked.parse(rawText || "Silence from the deep.");
                 if(window.MathJax) MathJax.typeset();
             } catch (e) {
