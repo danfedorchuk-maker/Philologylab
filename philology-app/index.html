@@ -15,30 +15,33 @@
         body { background-color: #050505; color: #d4d4d4; font-family: 'Georgia', serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
         .terminal { background-color: #111; padding: 30px; border: 1px solid #d4af37; width: 100%; max-width: 550px; box-shadow: 0 0 25px rgba(212, 175, 55, 0.15); border-radius: 12px; margin-top: 20px; box-sizing: border-box; position: relative; }
         
-        /* Mascot Styling: Prabu the Squirrel with Hat */
-        .prabu-container { text-align: center; margin-bottom: 20px; min-height: 100px; position: relative; }
+        /* Mascot Styling: Prabu the Squirrel with Fixed Hat */
+        .prabu-container { text-align: center; margin-bottom: 25px; min-height: 110px; position: relative; display: flex; justify-content: center; align-items: center; }
         
         .prabu-wrapper {
             position: relative;
             display: inline-block;
             cursor: pointer;
+            width: 80px;
+            height: 80px;
         }
 
-        .prabu-img { font-size: 65px; display: inline-block; transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); line-height: 1; }
+        .prabu-img { font-size: 70px; line-height: 1; z-index: 1; position: relative; transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         
-        /* Pinning the cap to the squirrel's head */
+        /* The "Hat Pin": Forcing the cap onto the head */
         .cap-overlay {
             position: absolute;
-            font-size: 40px;
-            top: -12px;    /* Pulls hat down onto head */
-            left: 22px;    /* Centers hat on head */
-            transform: rotate(10deg);
+            font-size: 45px;
+            top: -18px;    /* Pulls hat down onto head */
+            left: 20px;    /* Centers hat based on squirrel tilt */
+            transform: rotate(15deg);
+            z-index: 2;    /* Ensures cap is on top */
             pointer-events: none;
         }
 
         .prabu-active .prabu-img { transform: scaleY(1.1) rotateY(360deg) translateY(-10px) !important; }
 
-        #prabu-tablet { background: #d4af37; color: #000; padding: 10px 15px; border-radius: 10px; font-size: 0.8rem; font-weight: bold; display: none; margin: 15px auto; max-width: 80%; box-shadow: 0 4px 15px rgba(0,0,0,0.6); border: 2px solid #fff; position: relative; animation: fadeIn 0.4s ease-out; }
+        #prabu-tablet { background: #d4af37; color: #000; padding: 10px 15px; border-radius: 10px; font-size: 0.8rem; font-weight: bold; display: none; margin: 15px auto; max-width: 85%; box-shadow: 0 4px 15px rgba(0,0,0,0.6); border: 2px solid #fff; position: relative; animation: fadeIn 0.4s ease-out; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -68,8 +71,8 @@
                 <div class="prabu-img">🐿️</div>
                 <div class="cap-overlay">🧢</div>
             </div>
-            <div id="prabu-tablet">HEY FRIEND, WHAT SHALL WE GATHER TODAY?</div>
         </div>
+        <div id="prabu-tablet">HEY FRIEND, WHAT SHALL WE GATHER TODAY?</div>
         
         <!-- 6. TITLES & SUBTITLES -->
         <h1>ASK BABAJI</h1>
@@ -121,7 +124,6 @@
 
     <!-- 9. APPLICATION SCRIPTING -->
     <script>
-        // 10. FUNCTION: prabuSuggests() - Mascot Suggestions Logic
         async function prabuSuggests() {
             const prabu = document.getElementById('prabu-sprite');
             const tablet = document.getElementById('prabu-tablet');
@@ -148,7 +150,6 @@
             }, 5000);
         }
 
-        // 11. FUNCTION: generateWisdom() - Main Philology Analysis Logic
         async function generateWisdom() {
             const word = document.getElementById('userInput').value;
             const tradition = document.getElementById('tradition').value;
@@ -168,7 +169,6 @@
                 const data = await response.json();
                 const rawText = data.analysis;
 
-                // 12. RENDER PROCESS: Marked & MathJax
                 output.innerHTML = marked.parse(rawText || "Silence from the deep.");
                 if(window.MathJax) MathJax.typeset();
             } catch (e) {
