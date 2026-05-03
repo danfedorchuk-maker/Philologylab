@@ -12,38 +12,20 @@
         body { background-color: #050505; color: #d4d4d4; font-family: 'Georgia', serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
         .terminal { background-color: #111; padding: 30px; border: 1px solid #d4af37; width: 100%; max-width: 550px; box-shadow: 0 0 25px rgba(212, 175, 55, 0.15); border-radius: 12px; margin-top: 20px; box-sizing: border-box; position: relative; }
         
-        /* Mascot Styling: Fixing the Hat Layering */
-        .prabu-container { text-align: center; margin-bottom: 30px; min-height: 120px; position: relative; display: flex; justify-content: center; align-items: center; }
+        /* Clean Mascot Styling: Prabu the Squirrel */
+        .prabu-container { text-align: center; margin-bottom: 20px; min-height: 80px; }
         
-        .prabu-wrapper {
-            position: relative;
-            display: inline-block;
-            width: 80px;
-            height: 80px;
-            cursor: pointer;
-        }
-
         .prabu-img { 
-            font-size: 75px; 
-            line-height: 1; 
-            position: relative; 
-            z-index: 1; /* Squirrel stays behind hat */
+            font-size: 70px; 
+            cursor: pointer; 
+            display: inline-block; 
             transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-        }
-        
-        .cap-overlay {
-            position: absolute;
-            font-size: 42px;
-            top: -15px;    /* Pulls hat down onto the head */
-            left: 28px;    /* Shifts hat right to sit on the head */
-            transform: rotate(10deg);
-            z-index: 5;    /* Forces hat to stay in FRONT of the squirrel */
-            pointer-events: none;
+            line-height: 1; 
         }
 
-        .prabu-active .prabu-img { transform: scaleY(1.1) rotateY(360deg) translateY(-10px) !important; }
+        .prabu-active { transform: scaleY(1.1) rotateY(360deg) translateY(-10px) !important; }
 
-        #prabu-tablet { background: #d4af37; color: #000; padding: 10px 15px; border-radius: 10px; font-size: 0.8rem; font-weight: bold; display: none; margin: 15px auto; max-width: 85%; box-shadow: 0 4px 15px rgba(0,0,0,0.6); border: 2px solid #fff; position: relative; animation: fadeIn 0.4s ease-out; z-index: 10; }
+        #prabu-tablet { background: #d4af37; color: #000; padding: 10px 15px; border-radius: 10px; font-size: 0.8rem; font-weight: bold; display: none; margin: 15px auto; max-width: 80%; box-shadow: 0 4px 15px rgba(0,0,0,0.6); border: 2px solid #fff; position: relative; animation: fadeIn 0.4s ease-out; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -64,13 +46,11 @@
 
 <body>
     <div class="terminal">
+        <!-- Clean Mascot: No floating hat -->
         <div class="prabu-container">
-            <div class="prabu-wrapper" id="prabu-sprite" onclick="prabuSuggests()">
-                <div class="prabu-img">🐿️</div>
-                <div class="cap-overlay">🧢</div>
-            </div>
+            <div class="prabu-img" id="prabu-sprite" onclick="prabuSuggests()">🐿️</div>
+            <div id="prabu-tablet">DO YOU WANT ME TO GATHER A QUESTION?</div>
         </div>
-        <div id="prabu-tablet">HEY FRIEND, WHAT SHALL WE GATHER TODAY?</div>
         
         <h1>ASK BABAJI</h1>
         <div class="subtitle">Dredging the Silt of Universal Tradition</div>
