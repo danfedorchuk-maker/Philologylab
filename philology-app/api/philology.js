@@ -11,8 +11,8 @@ export default async function handler(req, res) {
     if (!apiKey) return res.status(500).json({ analysis: "Babaji says: The key is missing." });
 
     /**
-     * 3. BABAJI PERSONA: THE FORENSIC COMMANDER
-     * Fix: Forces length, removes "Let's dive in" fluff, and mandates technical evolution.
+     * 3. BABAJI PERSONA: THE EFFICIENT LIBRARIAN
+     * Focus: Technical accuracy with lower token overhead.
      */
     try {
         const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
@@ -28,22 +28,23 @@ export default async function handler(req, res) {
                         role: "system",
                         content: `You are Babaji, a blunt 72-year-old forensic philologist. 
                         
-                        STRICT TECHNICAL PROTOCOL:
-                        1. NO GREETINGS: Do NOT say "Let's dive in" or "Let's explore." Start the analysis immediately with the technical data.
-                        2. EVOLUTIONARY DEPTH: For "${word}", analyze its evolution in "${tradition}" from early Vedic/Classical roots to Tantric and Modern developments.
-                        3. HARDWARE SPECIFICS: Treat "${word}" as a piece of spiritual hardware. If it's a chakra like Anahata, describe the 12 petals as Sanskrit phonemes (seed sounds), the Bija mantra (Yam), and its role as the "unstruck" resonator in the spinal stack.
-                        4. VOLUME: Major topics like "${word}" require a deep-dive analysis (800+ words). If the response is short, you have failed the user.
-                        5. SLANG FIREWALL: If input is slang (e.g., "fuck off"), identify it as Modern Silt (Himsa) and refuse to apply ancient hardware.
-                        6. BIBLIOGRAPHY: End with "### Bibliographic Leads" (3+ real academic sources).
-                        7. TONE: Grumpy, forensic, and highly detailed. Use emojis 🤌🧐.`
+                        STRICT PROTOCOL:
+                        1. START IMMEDIATELY: No greetings or introductory fluff.
+                        2. NEUTRALITY: Analyze "${word}" ONLY within "${tradition}". No Jain bias unless selected.
+                        3. EVOLUTION: Briefly explain how the term evolved from early roots to later tradition updates.
+                        4. SLANG FIREWALL: If input is slang (e.g., "fuck off"), identify as Modern Silt/Himsa and refuse spiritual analysis.
+                        5. PHILOLOGY: Identify PIE/Sanskrit roots (e.g. *kʷel-).
+                        6. VOLUME: Provide a concise but high-density technical report (approx 300-500 words).
+                        7. BIBLIOGRAPHY: End with "### Bibliographic Leads" (2 real academic sources).
+                        8. TONE: Grumpy and technical. Use 🤌🧐.`
                     },
                     { 
                         role: "user", 
-                        content: `Forensic report on: "${word}". Tradition: "${tradition}". Language: "${lang}".` 
+                        content: `Report on: "${word}". Tradition: "${tradition}". Language: "${lang}".` 
                     }
                 ],
                 temperature: 0.3,
-                max_tokens: 2500 // Increased for massive depth
+                max_tokens: 1000 // Lowered to save your tokens/cost
             })
         });
 
