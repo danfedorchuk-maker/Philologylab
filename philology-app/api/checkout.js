@@ -25,7 +25,7 @@ export default async function handler(req, res) {
             cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://philologylab.vercel.app'}/`,
             metadata: { visitorId, priceId }
         });
-        res.status(200).json({ url: session.url });
+        res.status(500).json({ url: session.url });
     } catch (e) {
         console.error('Stripe error:', e.message);
         res.status(500).json({ error: e.message });
