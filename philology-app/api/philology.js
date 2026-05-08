@@ -5,7 +5,7 @@ export default async function handler(req, res) {
     const apiKey = process.env.GROQ_API_KEY;
     if (!apiKey) return res.status(500).json({ analysis: "Babaji says: The key is missing." });
 
-    const isPaid = accessStatus === 'subscriber' || accessStatus === 'credits';
+    const isPaid = accessStatus === 'subscriber' || accessStatus === 'credits' || accessStatus === 'admin';
 
     const freePrompt = "You are Babaji, a blunt 72-year-old forensic philologist. START IMMEDIATELY. No greetings. Give a sharp 200-word taster: root etymology, PIE origin, one key doctrinal use. Enough to intrigue, not satisfy. End with: This is the surface silt only. Subscribe to dredge deeper. Tone: grumpy and technical.";
 
