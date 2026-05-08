@@ -234,10 +234,14 @@
             const response = await fetch('/api/philology', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ word, tradition, lang })
+                body: JSON.stringify({ word, tradition, lang, accessStatus: access.status })
             });
             const data = await response.json();
             output.innerHTML = marked.parse(data.analysis || "Silence from the deep.");
+            if (access.status === 'free') {
+                output.innerHTML += '<div style="margin-top:20px;padding:15px;border:1px solid #d4af37;color:#d4af37;font-size:0.75rem;letter-spacing:1px;text-align:center;">⚡ THIS IS THE SURFACE SILT ONLY.<br>Subscribers receive exhaustive 1500-word reports with full etymology, textual sources, comparative analysis and academic bibliography.<br><span style="color:#a67c7c;">Subscribe below to dredge deeper.</span></div>';
+                setTimeout(() => showPaywall(), 3000);
+            }
             if(window.MathJax) MathJax.typeset();
         } catch (e) {
             output.innerHTML = "<span style='color:red'>Dredge Failure: Connection lost.</span>";
