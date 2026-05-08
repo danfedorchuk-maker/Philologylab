@@ -7,7 +7,7 @@ export default async function handler(req, res) {
         return res.status(500).json({ error: 'No Stripe key configured' });
     }
 
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+    console.error("KEY:", process.env.STRIPE_SECRET_KEY?.substring(0,15)); const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
     const { priceId, visitorId } = req.body;
 
     const SUBSCRIPTION_PRICES = [
