@@ -4,57 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Ask Babaji: Universal Philology</title>
-
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
     <style>
+        :root { --midnight:#05070a; --gold:#d4af37; --rose:#a67c7c; --navy:#0b1026; --tgold:#e2c275; }
         body { background-color: #050505; color: #d4d4d4; font-family: 'Georgia', serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        .terminal { background-color: #111; padding: 30px; border: 1px solid #d4af37; width: 100%; max-width: 550px; box-shadow: 0 0 25px rgba(212, 175, 55, 0.15); border-radius: 12px; margin-top: 20px; box-sizing: border-box; position: relative; }
-        
-        /* Clean Mascot Styling: Prabu the Squirrel */
+        .terminal { background-color: #111; padding: 30px; border: 1px solid #d4af37; width: 100%; max-width: 550px; box-shadow: 0 0 25px rgba(212,175,55,0.15); border-radius: 12px; margin-top: 20px; box-sizing: border-box; }
         .prabu-container { text-align: center; margin-bottom: 20px; min-height: 80px; }
-        
-        .prabu-img { 
-            font-size: 70px; 
-            cursor: pointer; 
-            display: inline-block; 
-            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            line-height: 1; 
-        }
-
+        .prabu-img { font-size: 70px; cursor: pointer; display: inline-block; transition: all 0.6s cubic-bezier(0.175,0.885,0.32,1.275); line-height: 1; }
         .prabu-active { transform: scaleY(1.1) rotateY(360deg) translateY(-10px) !important; }
-
-        #prabu-tablet { background: #d4af37; color: #000; padding: 10px 15px; border-radius: 10px; font-size: 0.8rem; font-weight: bold; display: none; margin: 15px auto; max-width: 80%; box-shadow: 0 4px 15px rgba(0,0,0,0.6); border: 2px solid #fff; position: relative; animation: fadeIn 0.4s ease-out; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
+        #prabu-tablet { background: #d4af37; color: #000; padding: 10px 15px; border-radius: 10px; font-size: 0.8rem; font-weight: bold; display: none; margin: 15px auto; max-width: 80%; box-shadow: 0 4px 15px rgba(0,0,0,0.6); border: 2px solid #fff; animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
         h1 { color: #d4af37; text-align: center; font-size: 1.8rem; letter-spacing: 5px; margin: 10px 0; text-transform: uppercase; }
         .subtitle { text-align: center; font-size: 0.75rem; color: #666; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 25px; border-bottom: 1px solid #222; padding-bottom: 15px; }
-        
         .input-group { display: flex; flex-direction: column; gap: 12px; }
         label { color: #d4af37; font-size: 0.7rem; text-transform: uppercase; margin-bottom: -5px; letter-spacing: 1px; }
         select, input { padding: 15px; background: #0a0a0a; border: 1px solid #333; color: #fff; font-size: 1rem; border-radius: 6px; width: 100%; box-sizing: border-box; }
-        
         button { padding: 20px; background: #300050; border: 1px solid #d4af37; color: #fff; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; border-radius: 6px; letter-spacing: 2px; }
         button:hover { background: #d4af37; color: #000; }
         .secondary-btn { background: #1a1a1a; border: 1px solid #444; font-size: 0.75rem; color: #888; padding: 12px; }
-
         #output { margin-top: 35px; line-height: 1.8; color: #ddd; font-size: 1.05rem; border-top: 1px solid #222; padding-top: 25px; }
+
+        /* PAYWALL */
+        #paywall { display:none; text-align:center; padding:20px 0; }
+        #paywall h2 { color:#d4af37; letter-spacing:4px; font-size:1rem; margin-bottom:10px; font-family:Georgia,serif; }
+        #paywall p { font-size:.8rem; color:rgba(226,194,117,.6); margin-bottom:30px; line-height:1.8; }
+        .pay-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
+        .pay-card { border:1px solid rgba(212,175,55,.2); padding:20px 12px; cursor:pointer; transition:all .3s; position:relative; }
+        .pay-card:hover { border-color:#d4af37; background:rgba(212,175,55,.05); }
+        .pay-card.featured { border-color:#d4af37; }
+        .pay-card .badge { position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:#d4af37; color:#000; font-size:.5rem; letter-spacing:2px; padding:3px 8px; }
+        .pay-card .price { color:#d4af37; font-size:1.2rem; margin-bottom:4px; }
+        .pay-card .desc { font-size:.6rem; letter-spacing:1px; color:rgba(226,194,117,.5); }
+        .pay-card .sub-desc { font-size:.55rem; color:rgba(166,124,124,.6); margin-top:6px; }
+        .founding-note { font-size:.6rem; color:rgba(166,124,124,.5); margin-top:20px; letter-spacing:1px; }
     </style>
 </head>
-
 <body>
-    <div class="terminal">
-        <!-- Clean Mascot: No floating hat -->
-        <div class="prabu-container">
-            <div class="prabu-img" id="prabu-sprite" onclick="prabuSuggests()">🐿️</div>
-            <div id="prabu-tablet">DO YOU WANT ME TO GATHER A QUESTION?</div>
-        </div>
-        
-        <h1>ASK BABAJI</h1>
-        <div class="subtitle">Dredging the Silt of Universal Tradition</div>
+<div class="terminal">
+    <div class="prabu-container">
+        <div class="prabu-img" id="prabu-sprite" onclick="prabuSuggests()">🐿️</div>
+        <div id="prabu-tablet">DO YOU WANT ME TO GATHER A QUESTION?</div>
+    </div>
 
+    <h1>ASK BABAJI</h1>
+    <div class="subtitle">Dredging the Silt of Universal Tradition</div>
+
+    <div id="main-form">
         <div class="input-group">
             <label>Tradition</label>
             <select id="tradition">
@@ -89,64 +85,124 @@
 
             <label>Term for Analysis</label>
             <input type="text" id="userInput" placeholder="Enter word...">
-            
+
             <button onclick="generateWisdom()">Dredge the Roots</button>
             <button class="secondary-btn" onclick="prabuSuggests()">ASK PRABU FOR A QUESTION</button>
         </div>
-
-        <div id="output">SYSTEM STATUS: READY.</div>
     </div>
 
-    <script>
-        async function prabuSuggests() {
-            const prabu = document.getElementById('prabu-sprite');
-            const tablet = document.getElementById('prabu-tablet');
-            const currentInput = document.getElementById('userInput').value;
-            
-            prabu.classList.add('prabu-active');
-            tablet.style.display = 'block';
-            tablet.innerText = "PRABU IS GATHERING...";
+    <!-- PAYWALL -->
+    <div id="paywall">
+        <h2>THE SILT GOES DEEPER</h2>
+        <p>Your free dredge has been completed.<br>To continue your philological journey, choose your path below.</p>
+        <div class="pay-grid">
+            <div class="pay-card featured" onclick="checkout('price_1TUbUqELsv6hW8wtmmCgRu6p')">
+                <div class="badge">FOUNDING MEMBER</div>
+                <div class="price">$10</div>
+                <div class="desc">PER MONTH</div>
+                <div class="sub-desc">Unlimited lookups • All traditions • All languages</div>
+            </div>
+            <div class="pay-card" onclick="checkout('price_1TUbZUELsv6hW8wtmNafMOD7')">
+                <div class="price">$20</div>
+                <div class="desc">PER MONTH</div>
+                <div class="sub-desc">Unlimited lookups • All traditions • All languages</div>
+            </div>
+            <div class="pay-card" onclick="checkout('price_1TUbb7ELsv6hW8wtlwg6pW19')">
+                <div class="price">$2</div>
+                <div class="desc">ONE LOOKUP</div>
+                <div class="sub-desc">Single philological deep-dive</div>
+            </div>
+            <div class="pay-card" onclick="checkout('price_1TUbdHELsv6hW8wtgMCBpXSv')">
+                <div class="price">$5</div>
+                <div class="desc">THREE LOOKUPS</div>
+                <div class="sub-desc">Triple the etymological wisdom</div>
+            </div>
+        </div>
+        <div class="founding-note">⚡ FOUNDING MEMBER RATE LOCKED FOREVER • FIRST 1,000 SEEKERS ONLY</div>
+    </div>
 
-            try {
-                const response = await fetch('/api/prabu', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ currentInput })
-                });
-                const data = await response.json();
-                tablet.innerText = data.suggestion;
-            } catch (e) {
-                tablet.innerText = "PRABU SAYS: 'The silt is too deep here!'";
-            }
+    <div id="output">SYSTEM STATUS: READY.</div>
+</div>
 
-            setTimeout(() => {
-                prabu.classList.remove('prabu-active');
-            }, 5000);
+<script>
+    function getVisitorId() {
+        let vid = localStorage.getItem('philo_vid');
+        if (!vid) {
+            vid = 'v_' + Math.random().toString(36).substr(2,9) + '_' + Date.now();
+            localStorage.setItem('philo_vid', vid);
         }
+        return vid;
+    }
 
-        async function generateWisdom() {
-            const word = document.getElementById('userInput').value;
-            const tradition = document.getElementById('tradition').value;
-            const lang = document.getElementById('language').value; 
-            const output = document.getElementById('output');
+    const visitorId = getVisitorId();
 
-            if (!word) return;
-            output.innerHTML = "<span style='color:#d4af37'>Dredging the silt...</span>";
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('paid') === 'true') {
+        localStorage.setItem('philo_paid', 'true');
+        window.history.replaceState({}, '', '/');
+    }
 
-            try {
-                const response = await fetch('/api/philology', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ word, tradition, lang })
-                });
+    const adminParam = urlParams.get('admin');
+    if (adminParam === 'philology2026') {
+        localStorage.setItem('philo_vid', 'daniel_admin_philology');
+    }
 
-                const data = await response.json();
-                output.innerHTML = marked.parse(data.analysis || "Silence from the deep.");
-                if(window.MathJax) MathJax.typeset();
-            } catch (e) {
-                output.innerHTML = "<span style='color:red'>Dredge Failure: Connection lost.</span>";
-            }
+    async function checkAccess() {
+        try {
+            const res = await fetch('/api/verify', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ visitorId })
+            });
+            return await res.json();
+        } catch(e) {
+            return { status: 'free', remaining: 1 };
         }
-    </script>
-</body>
-</html>
+    }
+
+    async function checkout(priceId) {
+        try {
+            const res = await fetch('/api/checkout', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ priceId, visitorId })
+            });
+            const data = await res.json();
+            if (data.url) window.location.href = data.url;
+        } catch(e) {
+            alert('Payment system unavailable. Please try again.');
+        }
+    }
+
+    function showPaywall() {
+        document.getElementById('main-form').style.display = 'none';
+        document.getElementById('paywall').style.display = 'block';
+    }
+
+    async function prabuSuggests() {
+        const prabu = document.getElementById('prabu-sprite');
+        const tablet = document.getElementById('prabu-tablet');
+        const currentInput = document.getElementById('userInput').value;
+        prabu.classList.add('prabu-active');
+        tablet.style.display = 'block';
+        tablet.innerText = "PRABU IS GATHERING...";
+        try {
+            const response = await fetch('/api/prabu', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ currentInput })
+            });
+            const data = await response.json();
+            tablet.innerText = data.suggestion;
+        } catch (e) {
+            tablet.innerText = "PRABU SAYS: 'The silt is too deep here!'";
+        }
+        setTimeout(() => { prabu.classList.remove('prabu-active'); }, 5000);
+    }
+
+    async function generateWisdom() {
+        const access = await checkAccess();
+        if (access.status === 'limit') { showPaywall(); return; }
+
+        if (access.status === 'credits') {
+            await fetch('/api/use-credit', {
