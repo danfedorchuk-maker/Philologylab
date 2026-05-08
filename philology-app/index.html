@@ -206,3 +206,41 @@
 
         if (access.status === 'credits') {
             await fetch('/api/use-credit', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ visitorId })
+            });
+        }
+
+        if (access.status === 'free') {
+            await fetch('/api/verify', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ visitorId, markUsed: true })
+            });
+        }
+
+        const word = document.getElementById('userInput').value;
+        const tradition = document.getElementById('tradition').value;
+        const lang = document.getElementById('language').value;
+        const output = document.getElementById('output');
+
+        if (!word) return;
+        output.innerHTML = "<span style='color:#d4af37'>Dredging the silt...</span>";
+
+        try {
+            const response = await fetch('/api/philology', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ word, tradition, lang })
+            });
+            const data = await response.json();
+            output.innerHTML = marked.parse(data.analysis || "Silence from the deep.");
+            if(window.MathJax) MathJax.typeset();
+        } catch (e) {
+            output.innerHTML = "<span style='color:red'>Dredge Failure: Connection lost.</span>";
+        }
+    }
+</script>
+</body>
+</html>
