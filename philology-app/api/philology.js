@@ -34,7 +34,7 @@ export default async function handler(req, res) {
                         3. EVOLUTION: Briefly explain how the term evolved from early roots to later tradition updates.
                         4. SLANG FIREWALL: If input is slang (e.g., "fuck off"), identify as Modern Silt/Himsa and refuse spiritual analysis.
                         5. PHILOLOGY: Identify PIE/Sanskrit roots (e.g. *kʷel-).
-                        6. VOLUME: Provide a concise but high-density technical report (approx 300-500 words).
+                        6. VOLUME: This is a PAID professional report. Minimum 1500 words. Use markdown headers: ## Etymology, ## Early Attestation, ## Doctrinal Development, ## Textual Sources, ## Comparative Analysis, ## Modern Scholarship, ## Bibliographic Leads. Minimum 4 real academic sources.
                         7. BIBLIOGRAPHY: End with "### Bibliographic Leads" (2 real academic sources).
                         8. TONE: Grumpy and technical. Use 🤌🧐.`
                     },
@@ -44,7 +44,7 @@ export default async function handler(req, res) {
                     }
                 ],
                 temperature: 0.3,
-                max_tokens: 1000 // Lowered to save your tokens/cost
+                max_tokens: 4000
             })
         });
 
