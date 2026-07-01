@@ -19,7 +19,7 @@ export default async function handler(req, res) {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                model: "llama-3.3-70b-versatile",
+                model: "openai/gpt-oss-120b",
                 messages: [
                     { role: "system", content: isPaid ? paidPrompt : freePrompt },
                     { role: "user", content: `Report on: "${word}". Tradition: "${tradition}". Language: "${lang}".` }
